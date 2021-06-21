@@ -1,0 +1,5 @@
+boot.wav is played from root's crontab (disabled since installation of the NVME SSD)
+halt.wav is played from a systemd service
+	Filepath is /etc/systemd/system/daniel-shutdown-noise.service
+
+September/September.wav is played via the adjacent shell script, programmed to only play on the 21st of September. This script is run from root's crontab on boot.
