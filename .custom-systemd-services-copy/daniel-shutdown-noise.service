@@ -1,0 +1,13 @@
+[Unit]
+Description=Autoplay sound effect on system shutdown or reboot
+Before=shutdown.target reboot.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/true
+ExecStop=/usr/bin/play /home/daniel/PowerNoises/halt.wav
+
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
