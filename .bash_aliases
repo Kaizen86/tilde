@@ -60,7 +60,6 @@ volume()
 		echo "${FUNCNAME[0]}: Input outside of range 0-100."
 	fi
 }
-END-COMMENT
 
 # KDE lock/unlock/logout commands
 alias lock='loginctl lock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
