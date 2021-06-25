@@ -35,21 +35,6 @@ alias ccat='pygmentize -g -O style=monokai'
 # Always make less decode ANSI colour codes
 alias less='less -r'
 
-<< 'END-COMMENT'
-	I have temporarily removed this because the volume
-	readback is returning values too low due to frankly
-	illogical values being returned from amixer.
-	(Why the hell is the Maximum 87???)
-	Until I work out a way to scale the values to something
-	reasonable, this has been put in the time-out corner.
-	
-	It's not completely broken, mind. The ability to update
-	the volume level works perfectly. Just the readback
-	is wonky. If you only care about changing the volume,
-	feel free to re-enable this.
-
-	Aight peace ooouuuttt
-	
 # System volume adjustment/readback tool
 # NOTE: This uses amixer, so be sure to install alsa-utils.
 volume() 
@@ -62,15 +47,10 @@ volume()
 	elif [ $# -eq 0 ]; then
 		# Output the current volume percentage if no argument was given
 
-		# I'll be honest, I have no idea what that sed is doing.
-		# Somehow it removes the extraneous lines by combining the noprint option with the /p print command and a mystery regex.
-		# It leaves us with a single line, something that looks like
-		#  : values=30
+		# When in doubt, steal from the internet because somebody smarter than you has probably done it before.
+		# https://unix.stackexchange.com/questions/89571/how-to-get-volume-level-from-the-command-line
+		awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master)
 
-		# The following cut command is much more straightforward; it removes
-		# everything up to and including the equals sign, leaving just the number.
-
-		echo $(amixer cget name='Master Playback Volume' | sed -n '/ v/p' | cut -d= -f2)%
 		return
 	elif ! [[ $1 =~ ^[-]?[0-9]+$ ]]; then  # Check argument is actually text rather than a number
 		echo "${FUNCNAME[0]}: Input was not a number."
