@@ -2,84 +2,101 @@
 # ~/.bash_aliases
 #
 
-# This file contains various functions and aliases
+# This file contains various functions and aliases I frequently use to make tasks significantly easier
 
 # Package manager shortcuts
-
 # Warning if package manager is undefined
 if [ -z "$PKG_MANAGER" ]; then
 	me=`basename "$0"`
-	echo "$me: Warning - $PKG_MANAGER is not set!"
+	echo "$me: Warning - \$PKG_MANAGER is not set!"
 fi
-
+# Install one or more packages
 gimme() {
 	for package in "${@:1}"; do
-		if [ "$PKG_MANAGER" = "apt-get" ]; then
-			sudo apt-get install "$package"
-		elif [ "$PKG_MANAGER" = "pacman" ]; then
-			sudo pacman -S "$package"
-		else
-			echo Unsupported package manager \""$PKG_MANAGER"\"
-			return
-		fi
+		case $PKG_MANAGER in 
+			apt-get)
+				sudo apt-get install "$package"
+				;;
+			pacman)
+				sudo pacman -S "$package"
+				;;
+			*)
+				echo Unsupported package manager \""$PKG_MANAGER"\"
+				return
+		esac
 	done
 }
-
+# Remove one or more packages, as well as any orphaned dependencies associated with the package(s)
 purge() {
 	for package in "${@:1}"; do
-		if [ "$PKG_MANAGER" = "apt-get" ]; then
-			sudo apt-get purge "$package"
-		elif [ "$PKG_MANAGER" = "pacman" ]; then
-			sudo pacman -Rs "$package";
-			autoremove
-		else
-			echo Unsupported package manager \""$PKG_MANAGER"\"
-			return
-		fi
+		case $PKG_MANAGER in
+			apt-get)
+				sudo apt-get purge "$package"
+				;;
+			pacman)
+				sudo pacman -Rs "$package";
+				autoremove
+				;;
+			*)
+				echo Unsupported package manager \""$PKG_MANAGER"\"
+				return
+		esac
 	done
 }
-
+# Searches for one or more packages
 findme() {
 	for package in "${@:1}"; do
-		if [ "$PKG_MANAGER" = "apt-get" ]; then
-			apt-cache search "$package"
-		elif [ "$PKG_MANAGER" = "pacman" ]; then
-			pacman -Ss "$package"
-		else
-			echo Unsupported package manager \""$PKG_MANAGER"\"
-			return
-		fi
+		case $PKG_MANAGER in
+			apt-get)
+				apt-cache search "$package"
+				;;
+			pacman)
+				pacman -Ss "$package"
+				;;
+			*)
+				echo Unsupported package manager \""$PKG_MANAGER"\"
+				return
+		esac
 	done
 }
-
+# Syncs package database
 update() {
-	if [ "$PKG_MANAGER" = "apt-get" ]; then
-		sudo apt-get update
-	elif [ "$PKG_MANAGER" = "pacman" ]; then
-		sudo pacman -Syy
-	else
-		echo Unsupported package manager \""$PKG_MANAGER"\"
-	fi
+	case $PKG_MANAGER in
+		apt-get)
+			sudo apt-get update
+			;;
+		pacman)
+			sudo pacman -Syy
+			;;
+		*)
+			echo Unsupported package manager \""$PKG_MANAGER"\"
+	esac
 }
-
+# Performs an upgrade of all packages
 upgrade() {
-	if [ "$PKG_MANAGER" = "apt-get" ]; then
-		sudo apt-get upgrade
-	elif [ "$PKG_MANAGER" = "pacman" ]; then
-		sudo pacman -Syu
-	else
-		echo Unsupported package manager \""$PKG_MANAGER"\"
-	fi
+	case $PKG_MANAGER in
+		apt-get)
+			sudo apt-get upgrade
+			;;
+		pacman)
+			sudo pacman -Syu
+			;;
+		*)
+			echo Unsupported package manager \""$PKG_MANAGER"\"
+	esac
 }
-
+# Automatically removes orphaned packages
 autoremove() {
-	if [ "$PKG_MANAGER" = "apt-get" ]; then
-		sudo apt-get autoremove
-	elif [ "$PKG_MANAGER" = "pacman" ]; then
-		sudo pacman -Rs $(pacman -Qtdq)
-	else
-		echo Unsupported package manager \""$PKG_MANAGER"\"
-	fi
+	case $PKG_MANAGER in
+		apt-get)
+			sudo apt-get autoremove
+			;;
+		pacman)
+			sudo pacman -Rs $(pacman -Qtdq)
+			;;
+		*)
+			echo Unsupported package manager \""$PKG_MANAGER"\"
+	esac
 }
 
 # Python aliases
@@ -89,9 +106,10 @@ alias pip=pip3
 pip3() # Rest in peace 'pip3 search'.
 {
 	if [ $1 == "search" ]; then
-		command pip_search "${@:2}" | more;
+		# Run pip_search with the arguments, excluding the first two "pip search" words
+		pip_search "${@:2}" | more;
 	else
-		command pip3 "$@";
+		pip3 "$@";
 	fi
 }
 
