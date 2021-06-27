@@ -44,7 +44,7 @@ findme() {
 		if [ "$PKG_MANAGER" = "apt-get" ]; then
 			apt-cache search "$package"
 		elif [ "$PKG_MANAGER" = "pacman" ]; then
-			pacman -S "$package"
+			pacman -Ss "$package"
 		else
 			echo Unsupported package manager \""$PKG_MANAGER"\"
 			return
