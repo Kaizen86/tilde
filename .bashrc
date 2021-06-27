@@ -5,6 +5,20 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Determine the system's package manager
+declare -A osInfo;
+osInfo[/etc/redhat-release]=yum
+osInfo[/etc/arch-release]=pacman
+osInfo[/etc/gentoo-release]=emerge
+osInfo[/etc/SuSE-release]=zypp
+osInfo[/etc/debian_version]=apt-get
+for f in ${!osInfo[@]}
+do
+	if [[ -f $f ]]; then
+		PKG_MANAGER=${osInfo[$f]};
+	fi
+done
+
 # Run the aliases file if it exists
 if [ -f "$HOME/.bash_aliases" ]; then
 	. "$HOME/.bash_aliases"
@@ -14,16 +28,16 @@ fi
 if [ -x /usr/bin/tput ]; then
 	# It exists, let's run it!
 	tput setaf 1 >&/dev/null
-	colour_prompt=yes # Set a variable to indicate that colours are supported.
-    else
-	# Unset the variable just to be sure.
-	colour_prompt=
+	colour_prompt=yes # This variable determines whether the prompt will include colour ANSI codes
+else
+	# Colours are *not* supported
+	colour_prompt=no
 fi
 
 # Use a colour prompt if available, otherwise use the colourless version
 if [ "$colour_prompt" = yes ]; then
 	if [ "$(whoami)" = root ]; then
-		# Modified version so username is red if the user is root
+		# Modified version so username turns red if the user is root
 		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;32m\]@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 	else
 		# Normal colour scheme
