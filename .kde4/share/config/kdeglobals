@@ -137,7 +137,6 @@ Name=Breeze Dark
 font=Eurostile,10,-1,5,75,0,0,0,0,0,Bold
 menuFont=Eurostile,10,-1,5,75,0,0,0,0,0,Bold
 shadeSortColumn=true
-smallestReadableFont=Eurostile,8,-1,5,75,0,0,0,0,0,Bold
 toolBarFont=Eurostile,10,-1,5,75,0,0,0,0,0,Bold
 widgetStyle=Breeze
 
