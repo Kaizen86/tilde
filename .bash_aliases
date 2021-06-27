@@ -1,15 +1,86 @@
-# Apt aliases
-alias gimme='sudo pacman -S'
-alias purge='sudo pacman -Rs'
-findme() {
-	for var in "$@"
-	do
-		pacman -Ss "$var"
+#
+# ~/.bash_aliases
+#
+
+# This file contains various functions and aliases
+
+# Package manager shortcuts
+
+# Warning if package manager is undefined
+if [ -z "$PKG_MANAGER" ]; then
+	me=`basename "$0"`
+	echo "$me: Warning - $PKG_MANAGER is not set!"
+fi
+
+gimme() {
+	for package in "${@:1}"; do
+		if [ "$PKG_MANAGER" = "apt-get" ]; then
+			sudo apt-get install "$package"
+		elif [ "$PKG_MANAGER" = "pacman" ]; then
+			sudo pacman -S "$package"
+		else
+			echo Unsupported package manager \""$PKG_MANAGER"\"
+			return
+		fi
 	done
 }
-alias update='sudo pacman -Syy'
-alias upgrade='sudo pacman -Syu'
-#alias cleanup='sudo apt-get autoremove'
+
+purge() {
+	for package in "${@:1}"; do
+		if [ "$PKG_MANAGER" = "apt-get" ]; then
+			sudo apt-get purge "$package"
+		elif [ "$PKG_MANAGER" = "pacman" ]; then
+			sudo pacman -Rs "$package";
+			autoremove
+		else
+			echo Unsupported package manager \""$PKG_MANAGER"\"
+			return
+		fi
+	done
+}
+
+findme() {
+	for package in "${@:1}"; do
+		if [ "$PKG_MANAGER" = "apt-get" ]; then
+			apt-cache search "$package"
+		elif [ "$PKG_MANAGER" = "pacman" ]; then
+			pacman -S "$package"
+		else
+			echo Unsupported package manager \""$PKG_MANAGER"\"
+			return
+		fi
+	done
+}
+
+update() {
+	if [ "$PKG_MANAGER" = "apt-get" ]; then
+		sudo apt-get update
+	elif [ "$PKG_MANAGER" = "pacman" ]; then
+		sudo pacman -Syy
+	else
+		echo Unsupported package manager \""$PKG_MANAGER"\"
+	fi
+}
+
+upgrade() {
+	if [ "$PKG_MANAGER" = "apt-get" ]; then
+		sudo apt-get upgrade
+	elif [ "$PKG_MANAGER" = "pacman" ]; then
+		sudo pacman -Syu
+	else
+		echo Unsupported package manager \""$PKG_MANAGER"\"
+	fi
+}
+
+autoremove() {
+	if [ "$PKG_MANAGER" = "apt-get" ]; then
+		sudo apt-get autoremove
+	elif [ "$PKG_MANAGER" = "pacman" ]; then
+		sudo pacman -Rs $(pacman -Qtdq)
+	else
+		echo Unsupported package manager \""$PKG_MANAGER"\"
+	fi
+}
 
 # Python aliases
 alias python=python3
@@ -26,7 +97,7 @@ pip3() # Rest in peace 'pip3 search'.
 
 # Misc
 alias q=exit
-alias ls='ls --color=auto' 
+alias ls='ls --color=auto'
 mkcd() { mkdir -p "$@" && cd "$@"; }
 alias term='konsole &' #'gnome-terminal &'
 alias new=term
@@ -37,7 +108,7 @@ alias less='less -r'
 
 # System volume adjustment/readback tool
 # NOTE: This uses amixer, so be sure to install alsa-utils.
-volume() 
+volume()
 {
 	if [[ $1 == *-h* ]]; then  # Determine if "-h" appears in the argument. This matches -h and --help
 		# Help text
@@ -55,7 +126,7 @@ volume()
 	elif ! [[ $1 =~ ^[-]?[0-9]+$ ]]; then  # Check argument is actually text rather than a number
 		echo "${FUNCNAME[0]}: Input was not a number."
 	elif [[ $1 -ge 0 && $1 -le 100 ]]; then  # If it's a number between 0 and 100, pass it to amixer
-		amixer sset Master $1\%; 
+		amixer sset Master $1\%;
 	else  # However, if it is not within that range, exit with an error.
 		echo "${FUNCNAME[0]}: Input outside of range 0-100."
 	fi
