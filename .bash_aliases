@@ -92,7 +92,12 @@ autoremove() {
 			sudo apt-get autoremove
 			;;
 		pacman)
-			sudo pacman -Rs $(pacman -Qtdq)
+			unused=$(pacman -Qtdq)
+			if [ -z "$unused" ]; then
+				echo Nothing to do
+			else
+				sudo pacman -Rs $unused
+			fi
 			;;
 		*)
 			echo Unsupported package manager \""$PKG_MANAGER"\"
