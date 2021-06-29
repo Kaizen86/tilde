@@ -59,3 +59,8 @@ export VISUAL=$EDITOR # crontab uses a different var, so set that too.
 
 # Add 'thefuck' alias
 eval "$(thefuck --alias)"
+
+# Run neofetch if the shell is over SSH
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	neofetch
+fi
