@@ -157,6 +157,36 @@ volume()
 	fi
 }
 
+# Calculates the age of files/directories
+when()
+{
+	# Check if no arguments were supplied
+	if [ $# -eq 0 ]; then
+		echo "Specify at least 1 file or directory."
+		return 1;
+	fi
+	
+	for file in "${@:1}"; do
+		# Get the current Epoch and subtract the Epoch of the file
+		local age=$(($(date +%s)-$(date -r "$file" +%s)))
+
+		# https://unix.stackexchange.com/questions/27013/displaying-seconds-as-days-hours-mins-seconds
+		# Tweaked to support years and output the name of the file in question
+		local Y=$((age/365/60/60/24))
+		local D=$((age/365/60/60%24))
+		local H=$((age/60/60%24))
+		local M=$((age/60%60))
+		local S=$((age%60))
+		printf '%s: ' "$file"
+		(( $Y > 0 )) && printf '%d years ' $Y
+		(( $D > 0 )) && printf '%d days ' $D
+		(( $H > 0 )) && printf '%d hours ' $H
+		(( $M > 0 )) && printf '%d minutes ' $M
+		(( $Y > 0 || $D > 0 || $H > 0 || $M > 0 )) && printf 'and '
+		printf '%d seconds\n' $S
+	done
+}
+
 # KDE lock/unlock/logout commands
 alias lock='loginctl lock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
 alias unlock='loginctl unlock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
