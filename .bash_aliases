@@ -167,6 +167,12 @@ when()
 	fi
 	
 	for file in "${@:1}"; do
+		# Check if the file is even a file or directory
+		if [[ ! (-f $file || -d $file) ]]; then
+			echo $0: \'$file\' does not exist
+			continue
+		fi
+
 		# Get the current Epoch and subtract the Epoch of the file
 		local age=$(($(date +%s)-$(date -r "$file" +%s)))
 
