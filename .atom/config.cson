@@ -1,0 +1,25 @@
+"*":
+  core:
+    telemetryConsent: "limited"
+  editor:
+    fontFamily: "Noto Sans Mono"
+    fontSize: 17
+    showIndentGuide: true
+    softTabs: false
+    tabType: "hard"
+  "exception-reporting":
+    userId: "e4ff2e73-552d-46da-941d-0818f70ed2a0"
+  "highlight-line":
+    enableBackgroundColor: false
+    enableSelectionBorder: true
+    hideHighlightOnSelect: true
+  "line-number-color":
+    lineNumberBackground: "#0b6f4e"
+  "linter-ui-default":
+    showPanel: true
+  "spell-check":
+    locales: [
+      "en-GB"
+    ]
+  welcome:
+    showOnStartup: false
