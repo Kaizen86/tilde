@@ -114,7 +114,10 @@ pip3() # Rest in peace 'pip3 search'.
 		# Run pip_search with the arguments, excluding the first two "pip search" words
 		pip_search "${@:2}" | more;
 	else
-		pip3 "$@";
+		#pip3 "$@";
+		# I'm having an extremely bizzare issue where pip crashes Bash under Konsole.
+		# To solve this ridiculousness, we simply run it under zsh.
+		zsh -c "pip3 $@"
 	fi
 }
 
