@@ -11,7 +11,7 @@ if [ -z "$PKG_MANAGER" ]; then
 	echo "$me: Warning - \$PKG_MANAGER is not set!"
 fi
 # Install one or more packages
-gimme() {
+fetch() {
 	for package in "${@:1}"; do
 		case $PKG_MANAGER in 
 			apt-get)
