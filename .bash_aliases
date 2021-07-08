@@ -133,6 +133,7 @@ alias ccat='pygmentize -g -O style=monokai'
 alias less='less -r'
 # Force colour mode for ls
 alias ls='ls --color'
+alias ftp=lftp
 
 # System volume adjustment/readback tool
 # NOTE: This uses amixer, so be sure to install alsa-utils.
