@@ -138,7 +138,13 @@ mkcd() { mkdir -p "$@" && cd "$@"; }
 alias term='konsole &' #'gnome-terminal &'
 alias new=term
 # Its like cat but with syntax highlighting. pygmentize is part of the python-pygments package
-alias ccat='pygmentize -g -O style=monokai'
+#alias ccat='pygmentize -g -O style=monokai'
+ccat()
+{
+	# Swap instances of 'pygmentize' in the stderr to the function name to avoid breaking the illusion
+	# https://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter/52575087#52575087
+	pygmentize -g -O style=monokai $@ 2> >(sed -e "s/pygmentize/${FUNCNAME[0]}/g" >&2)
+}
 # Always make less decode ANSI colour codes
 alias less='less -r'
 # Force colour mode for ls
