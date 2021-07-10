@@ -13,7 +13,7 @@ fi
 # Install one or more packages
 fetch() {
 	for package in "${@:1}"; do
-		case $PKG_MANAGER in 
+		case $PKG_MANAGER in
 			apt-get)
 				sudo apt-get install "$package"
 				;;
@@ -110,14 +110,24 @@ alias py=python3
 alias pip=pip3
 pip3() # Rest in peace 'pip3 search'.
 {
-	if [ $1 == "search" ]; then
+	if [ "$1" == "search" ]; then
 		# Run pip_search with the arguments, excluding the first two "pip search" words
 		pip_search "${@:2}" | more;
 	else
 		#pip3 "$@";
 		# I'm having an extremely bizzare issue where pip crashes Bash under Konsole.
-		# To solve this ridiculousness, we simply run it under zsh.
-		zsh -c "pip3 $@"
+		# To solve this ridiculousness, simply run it under zsh.
+		#zsh -c "pip3 \"$@\""
+		#zsh -c "echo '$@''"
+		# TODO: figure out how to make this actually work
+
+		# Bandaid warning
+		if [ "$0" == "/bin/bash" ]; then
+			echo "pip3 broken in bash atm"
+			echo "   zsh -c \"pip3 $@\""
+		else
+			pip3 $@
+		fi
 	fi
 }
 
@@ -169,7 +179,7 @@ when()
 		echo "Specify at least 1 file or directory."
 		return 1;
 	fi
-	
+
 	for file in "${@:1}"; do
 		# Check if the file is even a file or directory
 		if [[ ! (-f $file || -d $file) ]]; then
