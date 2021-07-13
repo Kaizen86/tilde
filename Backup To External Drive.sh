@@ -1,8 +1,8 @@
 #!/bin/bash
 #Full backup script
 #CAUTION - WILL REMOVE ALL FILES AT THE TARGET FOLDER BEFORE COPYING
-drive=/media/$(whoami)/BACKUP
-folder=UBUNTU
+drive=/run/media/$(whoami)/BACKUP
+folder=ARCH
 
 echo "External drive backup utility"
 

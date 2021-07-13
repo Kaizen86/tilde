@@ -3,8 +3,8 @@ Description=Internal RGB light controller based on CPU temperature
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/sudo /usr/bin/python3 -u /home/daniel/Documents/Python/systemd_scripts/InternalLights/main.py
-ExecStop=/usr/bin/python3 /home/daniel/Documents/Python/systemd_scripts/InternalLights/turn_off.py
+ExecStart=/usr/bin/sudo /usr/bin/python3 -u /home/daniel/Documents/Programming/Python/systemd_scripts/InternalLights/main.py
+ExecStop=/usr/bin/python3 /home/daniel/Documents/Programming/Python/systemd_scripts/InternalLights/turn_off.py
 
 [Install]
 WantedBy=multi-user.target
