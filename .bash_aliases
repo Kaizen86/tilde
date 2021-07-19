@@ -121,9 +121,13 @@ pip3() # Rest in peace 'pip3 search'.
 # Misc
 alias q=exit
 alias ls='ls --color=auto'
-mkcd() { mkdir -p "$@" && cd "$@"; }
 alias term='konsole &' #'gnome-terminal &'
 alias new=term
+alias ftp=lftp
+
+# "MaKe and Change Directory"
+mkcd() { mkdir -p "$@" && cd "$@"; }
+
 # Its like cat but with syntax highlighting. pygmentize is part of the python-pygments package
 #alias ccat='pygmentize -g -O style=monokai'
 ccat()
@@ -132,11 +136,11 @@ ccat()
 	# https://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter/52575087#52575087
 	pygmentize -g -O style=monokai $@ 2> >(sed -e "s/pygmentize/${FUNCNAME[0]}/g" >&2)
 }
-# Always make less decode ANSI colour codes
+
+# Force colour mode for less, ls, and grep
 alias less='less -r'
-# Force colour mode for ls
 alias ls='ls --color'
-alias ftp=lftp
+alias grep='grep --colour=always'
 
 # System volume adjustment/readback tool
 # NOTE: This uses amixer, so be sure to install alsa-utils.

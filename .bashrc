@@ -55,6 +55,8 @@ fi
 
 # Extend the PATH to include pip programs
 export PATH=$PATH:/home/daniel/.local/bin
+# Extend the PATH to include the Android SDK tools
+export PATH=$PATH:/opt/android-sdk/platform-tools
 
 # Use Nano as the default editor
 export EDITOR=/usr/bin/nano
