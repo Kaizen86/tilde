@@ -19,9 +19,12 @@ do
 	fi
 done
 
+# Determine script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # Run the aliases file if it exists
-if [ -f "$HOME/.bash_aliases" ]; then
-	. "$HOME/.bash_aliases"
+if [ -f "$SCRIPT_DIR/.bash_aliases" ]; then
+	. "$SCRIPT_DIR/.bash_aliases"
 fi
 
 # Test for the existence of tput, which is necessary for colours.
