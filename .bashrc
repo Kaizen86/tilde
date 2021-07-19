@@ -39,19 +39,36 @@ fi
 
 # Use a colour prompt if available, otherwise use the colourless version
 if [ "$colour_prompt" = yes ]; then
+	# Select colour for the hostname section of the prompt
+	case $(hostname) in
+		daniel-tower)
+			# CYAN
+			DEVICE_COLOUR=$(echo -en '\033[01;36m')
+			;;
+		daniel-laptop)
+			# YELLOW
+			DEVICE_COLOUR=$(echo -en '\033[01;33m')
+			;;
+		raspberrypi)
+			# DARK PINK
+			DEVICE_COLOUR=$(echo -en '\033[01;31m')
+			;;
+		*) # Unrecognised device
+			# LIME
+			DEVICE_COLOUR=$(echo -en '\033[01;32m')
+	esac
+
 	if [ "$(whoami)" = root ]; then
 		# Modified version so username turns red if the user is root
-		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;32m\]@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;32m\]@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 	else
 		# Normal colour scheme
-		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 	fi
 else
 	# No colours :(
 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
-# Old prompt
-#PS1='[\u@\h \W]\$ '
 
 # Extend the PATH to include pip programs
 export PATH=$PATH:/home/daniel/.local/bin
