@@ -134,7 +134,7 @@ ccat()
 {
 	# Swap instances of 'pygmentize' in the stderr to the function name to avoid breaking the illusion
 	# https://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter/52575087#52575087
-	pygmentize -g -O style=monokai $@ 2> >(sed -e "s/pygmentize/${FUNCNAME[0]}/g" >&2)
+	pygmentize -g -O style=monokai "$@" 2> >(sed -e "s/pygmentize/${FUNCNAME[0]}/g" >&2)
 }
 
 # Force colour mode for less, ls, and grep
