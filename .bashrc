@@ -79,8 +79,10 @@ export PATH=$PATH:/opt/android-sdk/platform-tools
 export EDITOR=/usr/bin/nano
 export VISUAL=$EDITOR # crontab uses a different var, so set that too.
 
-# Add 'thefuck' alias
-eval "$(thefuck --alias)"
+# Add 'thefuck' alias if it's installed on the system.
+if command -v thefuck &> /dev/null; then
+	eval "$(thefuck --alias)"
+fi
 
 # Run neofetch if the shell is over SSH
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
