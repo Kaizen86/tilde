@@ -37,8 +37,24 @@ else
 	colour_prompt=no
 fi
 
+# Define prompt as USER@HOST:PATH$
 # Use a colour prompt if available, otherwise use the colourless version
 if [ "$colour_prompt" = yes ]; then
+	# Select colour for the username section of the prompt
+	case $(whoami) in
+		daniel)
+			# CYAN
+			USER_COLOUR=$(echo -en '\033[01;36m')
+			;;
+		root)
+			# RED
+			USER_COLOUR=$(echo -en '\033[01;31m')
+			;;
+		*) # Unrecognised user
+			# LIME
+			USER_COLOUR=$(echo -en '\033[01;32m')
+	esac
+
 	# Select colour for the hostname section of the prompt
 	case $(hostname) in
 		daniel-tower)
@@ -58,13 +74,7 @@ if [ "$colour_prompt" = yes ]; then
 			DEVICE_COLOUR=$(echo -en '\033[01;32m')
 	esac
 
-	if [ "$(whoami)" = root ]; then
-		# Modified version so username turns red if the user is root
-		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\u\[\033[01;32m\]@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-	else
-		# Normal colour scheme
-		PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-	fi
+	PS1='${debian_chroot:+($debian_chroot)}\[$USER_COLOUR\]\u\[\033[01;32m\]@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
 	# No colours :(
 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
