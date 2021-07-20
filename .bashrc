@@ -5,6 +5,11 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Run neofetch if the shell is over SSH
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	neofetch
+fi
+
 # Determine the system's package manager
 declare -A osInfo;
 osInfo[/etc/redhat-release]=yum
@@ -92,9 +97,4 @@ export VISUAL=$EDITOR # crontab uses a different var, so set that too.
 # Add 'thefuck' alias if it's installed on the system.
 if command -v thefuck &> /dev/null; then
 	eval "$(thefuck --alias)"
-fi
-
-# Run neofetch if the shell is over SSH
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-	neofetch
 fi
