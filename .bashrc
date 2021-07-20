@@ -61,7 +61,7 @@ if [ "$colour_prompt" = yes ]; then
 	esac
 
 	# Select colour for the hostname section of the prompt
-	case $(hostname) in
+	case $HOSTNAME in
 		daniel-tower)
 			# CYAN
 			DEVICE_COLOUR=$(echo -en '\033[01;36m')
