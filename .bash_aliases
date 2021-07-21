@@ -32,7 +32,6 @@ purge() {
 			;;
 		pacman)
 			sudo pacman -Rs "${@:1}";
-			autoremove
 			;;
 		*)
 			echo Unsupported package manager \""$PKG_MANAGER"\"
