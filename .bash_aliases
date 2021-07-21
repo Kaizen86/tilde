@@ -26,20 +26,18 @@ fetch() {
 }
 # Remove one or more packages, as well as any orphaned dependencies associated with the package(s)
 purge() {
-	for package in "${@:1}"; do
-		case $PKG_MANAGER in
-			apt-get)
-				sudo apt-get purge "$package"
-				;;
-			pacman)
-				sudo pacman -Rs "$package";
-				autoremove
-				;;
-			*)
-				echo Unsupported package manager \""$PKG_MANAGER"\"
-				return
-		esac
-	done
+	case $PKG_MANAGER in
+		apt-get)
+			sudo apt-get purge "${@:1}"
+			;;
+		pacman)
+			sudo pacman -Rs "${@:1}";
+			autoremove
+			;;
+		*)
+			echo Unsupported package manager \""$PKG_MANAGER"\"
+			return
+	esac
 }
 # Searches for one or more packages
 findme() {
