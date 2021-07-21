@@ -12,19 +12,17 @@ if [ -z "$PKG_MANAGER" ]; then
 fi
 # Install one or more packages
 fetch() {
-	for package in "${@:1}"; do
-		case $PKG_MANAGER in
-			apt-get)
-				sudo apt-get install "$package"
-				;;
-			pacman)
-				sudo pacman -S "$package"
-				;;
-			*)
-				echo Unsupported package manager \""$PKG_MANAGER"\"
-				return
-		esac
-	done
+	case $PKG_MANAGER in
+		apt-get)
+			sudo apt-get install "${@:1}"
+			;;
+		pacman)
+			sudo pacman -S "${@:1}"
+			;;
+		*)
+			echo Unsupported package manager \""$PKG_MANAGER"\"
+			return
+	esac
 }
 # Remove one or more packages, as well as any orphaned dependencies associated with the package(s)
 purge() {
