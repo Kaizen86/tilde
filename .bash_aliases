@@ -136,6 +136,8 @@ ccat()
 alias less='less -r'
 alias ls='ls --color'
 alias grep='grep --colour=always'
+# HighLight alias for ack with passthrough
+alias hl='ack --passthru'
 
 # System volume adjustment/readback tool
 # NOTE: This uses amixer, so be sure to install alsa-utils.
