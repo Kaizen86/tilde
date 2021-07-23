@@ -119,7 +119,7 @@ pip3() # Rest in peace 'pip3 search'.
 			echo "Please run with zsh instead; zsh -c \"pip3$s$@\""
 		else
 			# Otherwise, proceed as normal.
-			pip3 "$@";
+			/usr/bin/pip3 "$@";
 		fi
 	fi
 }
