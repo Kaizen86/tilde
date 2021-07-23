@@ -109,7 +109,18 @@ pip3() # Rest in peace 'pip3 search'.
 		# Run pip_search with the arguments, excluding the first two "pip search" words
 		pip_search "${@:2}" | more;
 	else
-		pip3 "$@";
+		# Find the name of the terminal being used to run the shell
+		local term=$(ps -p $(ps -p $$ -o ppid | grep -v "PPID") -o args | grep -v "COMMAND")
+		# Is it Konsole?
+		if [[ "$term" == *"konsole" ]]; then
+			# Give a warning explaining why it failed and the command to rerun under zsh
+			echo "Warning - Attempting to run pip3 under Konsole with Bash causes the shell to crash."
+			[[ $@ = "" ]] && s="" || s=" " # Add space after 'pip3', but only when an argument was supplied
+			echo "Please run with zsh instead; zsh -c \"pip3$s$@\""
+		else
+			# Otherwise, proceed as normal.
+			pip3 "$@";
+		fi
 	fi
 }
 
