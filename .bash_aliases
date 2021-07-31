@@ -7,9 +7,21 @@
 # Package manager shortcuts
 # Warning if package manager is undefined
 if [ -z "$PKG_MANAGER" ]; then
-	me=`basename "$0"`
-	echo "$me: Warning - \$PKG_MANAGER is not set!"
+	echo "Warning - \$PKG_MANAGER is not set!"
 fi
+
+# Force colour mode for less, ls, and grep
+alias less='less -r'
+alias ls='ls --color'
+alias grep='grep --colour=always'
+# HighLight alias for ack with passthrough
+if [ $(command -v ack) &> /dev/null ]; then
+	alias hl='ack --passthru'
+else
+	echo "Warning - ack is not installed. hl will not provide colours."
+	alias hl=cat #Just so it at least still works
+fi
+
 # Install one or more packages
 fetch() {
 	case $PKG_MANAGER in
@@ -43,10 +55,10 @@ findme() {
 	for package in "${@:1}"; do
 		case $PKG_MANAGER in
 			apt-get)
-				apt-cache search "$package"
+				apt-cache search "$package" | hl "$package"
 				;;
 			pacman)
-				pacman -Ss "$package"
+				pacman -Ss "$package" | hl "$package"
 				;;
 			*)
 				echo Unsupported package manager \""$PKG_MANAGER"\"
@@ -142,13 +154,6 @@ ccat()
 	# https://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter/52575087#52575087
 	pygmentize -g -O style=monokai "$@" 2> >(sed -e "s/pygmentize/${FUNCNAME[0]}/g" >&2)
 }
-
-# Force colour mode for less, ls, and grep
-alias less='less -r'
-alias ls='ls --color'
-alias grep='grep --colour=always'
-# HighLight alias for ack with passthrough
-alias hl='ack --passthru'
 
 # System volume adjustment/readback tool
 # NOTE: This uses amixer, so be sure to install alsa-utils.
