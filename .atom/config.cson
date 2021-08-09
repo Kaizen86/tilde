@@ -16,7 +16,10 @@
   "line-number-color":
     lineNumberBackground: "#0b6f4e"
   "linter-ui-default":
+    panelHeight: 232
     showPanel: true
+  "markdown-preview":
+    useGitHubStyle: true
   "spell-check":
     locales: [
       "en-GB"
