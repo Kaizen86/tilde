@@ -1,0 +1,10 @@
+[Unit]
+Description=Discord Theme Assets Bodge
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/http-server -p 8089 /home/daniel/Documents/Discord/Themes
+ExecStop=/usr/bin/killall http-server
+
+[Install]
+WantedBy=multi-user.target
