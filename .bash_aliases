@@ -252,7 +252,7 @@ Try '${FUNCNAME[0]} --help' for more information"
 			continue
 		fi
 
-		# Use stat to determine 
+		# Use stat to read the file's age field, according to which one the user wants.
 		local file_epoch=$(stat -c$format_code $file)
 		# Is it 0?
 		if [ $file_epoch -eq 0 ]; then
