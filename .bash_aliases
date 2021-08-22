@@ -16,10 +16,14 @@ alias ls='ls --color'
 alias grep='grep --colour=always'
 # HighLight alias for ack with passthrough
 if [ $(command -v ack) &> /dev/null ]; then
-	alias hl='ack --passthru'
+	hl() {
+		ack --passthru $@ # First command receives the stream
+	}
 else
-	echo "Warning - ack is not installed. hl will not provide colours."
-	alias hl=cat #Just so it at least still works
+	echo "Warning - ack is not installed. 'hl' will not provide colours."
+	hl() {
+		cat # First command receives the stream
+	}
 fi
 
 # Install one or more packages
@@ -115,6 +119,9 @@ autoremove() {
 alias python=python3
 alias py=python3
 alias pip=pip3
+if [ ! $(command -v pip_search) &> /dev/null ]; then
+	echo "Warning - pip_search is not installed. 'pip3 search' will not function."
+fi
 pip3() # Rest in peace 'pip3 search'.
 {
 	if [ "$1" == "search" ]; then
