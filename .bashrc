@@ -10,6 +10,9 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 	neofetch
 fi
 
+# Ensure GPG is configured correctly
+export GPG_TTY=$(tty)
+
 # Determine the system's package manager
 declare -A osInfo;
 osInfo[/etc/redhat-release]=yum
