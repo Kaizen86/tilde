@@ -191,21 +191,77 @@ volume()
 # Calculates the age of files/directories
 when()
 {
-	# Check if no arguments were supplied
+	# Parse the first argument, if any.
+	case "$1" in
+
+		--help)
+			echo "Usage: ${FUNCNAME[0]} [OPTION] FILES
+Displays a human-readable time since the created/accessed/modified field of files and folders.
+
+Measurement arguments:
+	-c, --created           Time since file creation
+	-a, --accessed          Time since last file access
+	-m, --modified          Time since last modification (default mode)
+	-s, --statuschanged     Time since last status change"
+			return 0
+			;;
+
+		-c|--created)
+			#  %W   time of file birth, seconds since Epoch; 0 if unknown
+			local format_code=%W
+			shift
+			;;
+		-a|--accessed)
+			#  %X   time of last access, seconds since Epoch
+			local format_code=%X
+			shift
+			;;
+		-m|--modified)
+			# Use the modified time by default
+			local format_code=%Y
+			shift
+			;;
+		-s|--statuschanged)
+			#  %Z   time of last status change, seconds since Epoch
+			local format_code=%Z
+			shift
+			;;
+		-*)
+			echo "${FUNCNAME[0]}: unrecognised option '$1'
+Try '${FUNCNAME[0]} --help' for more information"
+			return 1
+			;;
+		*)
+			# First argument is a filename, use the Last Modified value by default.
+			#  %Y   time of last data modification, seconds since Epoch
+			local format_code=%Y
+			;;
+	esac
+
+	# Check if no files were supplied
 	if [ $# -eq 0 ]; then
-		echo "Specify at least 1 file or directory."
-		return 1;
+		echo "${FUNCNAME[0]}: specify at least 1 file or folder.
+Try '${FUNCNAME[0]} --help' for more information"
+		return 1
 	fi
 
 	for file in "${@:1}"; do
 		# Check if the file is even a file or directory
 		if [[ ! (-f $file || -d $file) ]]; then
-			echo $0: \'$file\' does not exist
+			echo ${FUNCNAME[0]}: \'$file\' does not exist
+			continue
+		fi
+
+		# Use stat to determine 
+		local file_epoch=$(stat -c$format_code $file)
+		# Is it 0?
+		if [ $file_epoch -eq 0 ]; then
+			printf '%s: <UNKNOWN>' "$file"
 			continue
 		fi
 
 		# Get the current Epoch and subtract the Epoch of the file
-		local age=$(($(date +%s)-$(date -r "$file" +%s)))
+		local age=$(( $(date +%s) - $file_epoch ))
 
 		# https://unix.stackexchange.com/questions/27013/displaying-seconds-as-days-hours-mins-seconds
 		# Tweaked to support years and output the name of the file in question
