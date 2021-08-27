@@ -119,9 +119,11 @@ autoremove() {
 alias python=python3
 alias py=python3
 alias pip=pip3
-if ! command -v pip_search &> /dev/null; then
-	echo "Warning - pip_search is not installed. 'pip3 search' will not function."
-fi
+
+# TODO: Fix this
+#if ! command -v pip_search &> /dev/null; then
+#	echo "Warning - pip_search is not installed. 'pip3 search' will not function."
+#fi
 pip3() # Rest in peace 'pip3 search'.
 {
 	if [ "$1" == "search" ]; then
