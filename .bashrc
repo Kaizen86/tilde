@@ -19,18 +19,20 @@ shopt -s histappend # Append to the history file, don't overwrite it
 export GPG_TTY=$(tty)
 
 # Determine the system's package manager
-declare -A osInfo;
+declare -A osInfo; # Associative array to match files with a package manager
 osInfo[/etc/redhat-release]=yum
 osInfo[/etc/arch-release]=pacman
 osInfo[/etc/gentoo-release]=emerge
 osInfo[/etc/SuSE-release]=zypp
 osInfo[/etc/debian_version]=apt-get
-for f in ${!osInfo[@]}
+for f in ${!osInfo[@]} # Iterate over each entry
 do
-	if [[ -f $f ]]; then
-		PKG_MANAGER=${osInfo[$f]};
+	if [[ -f $f ]]; then # Test for the file in question
+		PKG_MANAGER=${osInfo[$f]} # Read the value from the array
+		break # We're done here.
 	fi
 done
+unset osInfo # We don't need this anymore
 
 # Determine script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -44,15 +46,15 @@ fi
 if [ -x /usr/bin/tput ]; then
 	# It exists, let's run it!
 	tput setaf 1 >&/dev/null
-	colour_prompt=yes # This variable determines whether the prompt will include colour ANSI codes
+	COLOURS_SUPPORTED=yes # Remember that we enabled tput
 else
-	# Colours are *not* supported
-	colour_prompt=no
+	echo "Warning - tput not detected. Fancy prompt will be disabled."
+	COLOURS_SUPPORTED=no
 fi
 
 # Define prompt as USER@HOST:PATH$
-# Use a colour prompt if available, otherwise use the colourless version
-if [ "$colour_prompt" = yes ]; then
+# Use a colour prompt if possible, otherwise use the colourless version
+if [ "$COLOURS_SUPPORTED" = yes ]; then
 	# Select colour for the username section of the prompt
 	case $(whoami) in
 		daniel)
@@ -93,14 +95,13 @@ else
 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
-# Extend the PATH to include pip programs
+# Extend the PATH to include additional folders
 export PATH=$PATH:/home/daniel/.local/bin
-# Extend the PATH to include the Android SDK tools
 export PATH=$PATH:/opt/android-sdk/platform-tools
 
-# Use Nano as the default editor
+# Set the default editor
 export EDITOR=/usr/bin/nano
-export VISUAL=$EDITOR # crontab uses a different var, so set that too.
+export VISUAL=$EDITOR # Crontab uses a different variable
 
 # Add 'thefuck' alias if it's installed on the system.
 if command -v thefuck &> /dev/null; then
