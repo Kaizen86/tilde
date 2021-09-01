@@ -10,6 +10,11 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 	neofetch
 fi
 
+# Me increasing the history file limit tenfold:
+# https://www.youtube.com/watch?v=VtJUHGjVm0E
+HISTFILESIZE=5000
+shopt -s histappend # Append to the history file, don't overwrite it
+
 # Ensure GPG is configured correctly
 export GPG_TTY=$(tty)
 
