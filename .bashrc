@@ -53,7 +53,7 @@ else
 fi
 
 # Define prompt as USER@HOST:PATH$
-# Use a colour prompt if possible, otherwise use the colourless version
+# Use a colour prompt if possible, otherwise use the plain version
 if [ "$COLOURS_SUPPORTED" = yes ]; then
 	# Select colour for the username section of the prompt
 	case $(whoami) in
@@ -91,7 +91,7 @@ if [ "$COLOURS_SUPPORTED" = yes ]; then
 
 	PS1='${debian_chroot:+($debian_chroot)}\[$USER_COLOUR\]\u\[\033[01;32m\]@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-	# No colours :(
+	# Plain version for the rare event that colours aren't supported
 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 
