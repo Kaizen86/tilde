@@ -97,7 +97,6 @@ fi
 
 # Extend the PATH to include additional folders
 export PATH=$PATH:/home/daniel/.local/bin
-export PATH=$PATH:/opt/android-sdk/platform-tools
 
 # Set the default editor
 export EDITOR=/usr/bin/nano
