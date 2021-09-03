@@ -151,7 +151,7 @@ git()
 	local git_exec=$(which git) # Determine path to git
 	if [ "$1" == "clone" ]; then
 		# Clone the repository then run cd if it succeeded
-		$git_exec clone "${@:2}" && cd "$2"
+		$git_exec clone "${@:2}" && cd "$(basename "$2" .git)"
 	else
 		# Run Git as normal
 		$git_exec "${@:1}"
