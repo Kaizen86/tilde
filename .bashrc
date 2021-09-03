@@ -15,8 +15,14 @@ fi
 HISTFILESIZE=5000
 shopt -s histappend # Append to the history file, don't overwrite it
 
+# Extend the PATH to include additional folders
+export PATH=$PATH:/home/daniel/.local/bin
+
 # Ensure GPG is configured correctly
 export GPG_TTY=$(tty)
+
+# Determine script directory
+local SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Determine the system's package manager
 declare -A osInfo; # Associative array to match files with a package manager
@@ -33,9 +39,6 @@ do
 	fi
 done
 unset osInfo # We don't need this anymore
-
-# Determine script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Run the aliases file if it exists
 if [ -f "$SCRIPT_DIR/.bash_aliases" ]; then
@@ -94,9 +97,6 @@ else
 	# Plain version for the rare event that colours aren't supported
 	PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
-
-# Extend the PATH to include additional folders
-export PATH=$PATH:/home/daniel/.local/bin
 
 # Set the default editor
 export EDITOR=/usr/bin/nano
