@@ -22,7 +22,7 @@ export PATH=$PATH:/home/daniel/.local/bin
 export GPG_TTY=$(tty)
 
 # Determine script directory
-local SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Determine the system's package manager
 declare -A osInfo; # Associative array to match files with a package manager
