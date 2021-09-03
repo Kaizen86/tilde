@@ -120,28 +120,18 @@ alias python=python3
 alias py=python3
 alias pip=pip3
 
-# TODO: Fix this
-#if ! command -v pip_search &> /dev/null; then
-#	echo "Warning - pip_search is not installed. 'pip3 search' will not function."
-#fi
+if ! command -v pip_search &> /dev/null; then
+	echo "Warning - pip_search is not installed. 'pip3 search' will not function."
+fi
 pip3() # Rest in peace 'pip3 search'.
 {
 	if [ "$1" == "search" ]; then
-		# Run pip_search with the arguments, excluding the first two "pip search" words
-		pip_search "${@:2}" | more;
+		# Run pip_search with the remaining arguments, piped into more.
+		pip_search "${@:2}" | more
 	else
-		# Find the name of the terminal being used to run the shell
-		local term=$(ps -p $(ps -p $$ -o ppid | grep -v "PPID") -o args | grep -v "COMMAND")
-		# Is it Konsole?
-		if [[ "$term" == *"konsole" ]]; then
-			# Give a warning explaining why it failed and the command to rerun under zsh
-			echo "Warning - Attempting to run pip3 under Konsole with Bash causes the shell to crash."
-			[[ $@ = "" ]] && s="" || s=" " # Add space after 'pip3', but only when an argument was supplied
-			echo "Please run with zsh instead; zsh -c \"pip3$s$@\""
-		else
-			# Otherwise, proceed as normal.
-			/usr/bin/pip3 "$@";
-		fi
+		# Execute pip3 as normal
+		local pip_exec=$(which pip3) # Determine path to pip3
+		$pip_exec "$@"
 	fi
 }
 
@@ -154,6 +144,19 @@ alias ftp=lftp
 
 # "MaKe and Change Directory"
 mkcd() { mkdir -p "$@" && cd "$@"; }
+
+# Automatically cd into git cloned repositories
+git()
+{
+	local git_exec=$(which git) # Determine path to git
+	if [ "$1" == "clone" ]; then
+		# Clone the repository then run cd if it succeeded
+		$git_exec clone "${@:2}" && cd "$2"
+	else
+		# Run Git as normal
+		$git_exec "${@:1}"
+	fi
+}
 
 # Its like cat but with syntax highlighting. pygmentize is part of the python-pygments package
 #alias ccat='pygmentize -g -O style=monokai'
