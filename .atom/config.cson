@@ -14,10 +14,33 @@
     enableBackgroundColor: false
     enableSelectionBorder: true
     hideHighlightOnSelect: true
+  "ide-python":
+    pylsPlugins:
+      autopep8: {}
+      flake8:
+        ignore: [
+          "E302"
+          "E402"
+          "W191"
+        ]
+        maxLineLength: 128
+      pycodestyle:
+        ignore: [
+          "E302"
+          "E402"
+          "E305"
+          "W191"
+          "W292"
+          "E265"
+          "E722"
+        ]
+        maxLineLength: 128
+      pydocstyle: {}
+      pyflakes: {}
   "line-number-color":
     lineNumberBackground: "#0b6f4e"
   "linter-ui-default":
-    panelHeight: 232
+    panelHeight: 145
     showPanel: true
   "markdown-preview":
     useGitHubStyle: true
