@@ -146,13 +146,16 @@ alias ftp=lftp
 # "MaKe and Change Directory"
 mkcd() { mkdir -p "$@" && cd "$@"; }
 
-# Automatically cd into git cloned repositories
+# Git shortcuts
 git()
 {
 	local git_exec=$(which git) # Determine path to git
 	if [ "$1" == "clone" ]; then
 		# Clone the repository then run cd if it succeeded
 		$git_exec clone "${@:2}" && cd "$(basename "$2" .git)"
+	elif [ "$1" == "tree" ]; then
+		# Fancier git logs
+		$git_exec log --graph --decorate --abbrev-commit --pretty=medium --branches --remotes "${@:2}"
 	else
 		# Run Git as normal
 		$git_exec "${@:1}"
