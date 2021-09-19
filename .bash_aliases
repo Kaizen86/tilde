@@ -120,7 +120,6 @@ alias python=python3
 alias py=python3
 alias pip=pip3
 
-
 if ! [ -x "$(command -v pip_search)" ]; then
 	echo "Warning - pip_search is not installed. 'pip3 search' will not function."
 fi
@@ -139,8 +138,7 @@ pip3() # Rest in peace 'pip3 search'.
 # Misc
 alias q=exit
 alias ls='ls --color=auto'
-alias term='konsole &' #'gnome-terminal &'
-alias new=term
+alias new='konsole &'
 alias ftp=lftp
 
 # "MaKe and Change Directory"
@@ -151,7 +149,7 @@ git()
 {
 	local git_exec=$(which git) # Determine path to git
 	if [ "$1" == "clone" ]; then
-		# Clone the repository then run cd if it succeeded
+		# Clone the repository then cd into it
 		$git_exec clone "${@:2}" && cd "$(basename "$2" .git)"
 	elif [ "$1" == "tree" ]; then
 		# Fancier git logs
@@ -163,7 +161,6 @@ git()
 }
 
 # Its like cat but with syntax highlighting. pygmentize is part of the python-pygments package
-#alias ccat='pygmentize -g -O style=monokai'
 ccat()
 {
 	# Swap instances of 'pygmentize' in the stderr to the function name to avoid breaking the illusion
@@ -183,9 +180,12 @@ volume()
 	elif [ $# -eq 0 ]; then
 		# Output the current volume percentage if no argument was given
 
-		# When in doubt, steal from the internet because somebody smarter than you has probably done it before.
-		# https://unix.stackexchange.com/questions/89571/how-to-get-volume-level-from-the-command-line
-		awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master)
+		# TODO: amixer is a tricksy gremlin. 
+		# Find a way to reliably determine current volume %, with or without amixer.
+		echo "Volume readback not implemented"
+
+		# Previous non-functional method, kept here as a starting point:
+		#awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master)
 
 		return
 	elif ! [[ $1 =~ ^[-]?[0-9]+$ ]]; then  # Check argument is actually text rather than a number
@@ -197,7 +197,7 @@ volume()
 	fi
 }
 
-# Calculates the age of files/directories
+# Calculates the age of files/directories and displays it in a human-readable format
 when()
 {
 	# Parse the first argument, if any.
@@ -263,7 +263,7 @@ Try '${FUNCNAME[0]} --help' for more information"
 
 		# Use stat to read the file's age field, according to which one the user wants.
 		local file_epoch=$(stat -c$format_code $file)
-		# Is it 0?
+		# Is it 0? That means there was an error, usually.
 		if [ $file_epoch -eq 0 ]; then
 			printf '%s: <UNKNOWN>' "$file"
 			continue
@@ -273,7 +273,7 @@ Try '${FUNCNAME[0]} --help' for more information"
 		local age=$(( $(date +%s) - $file_epoch ))
 
 		# https://unix.stackexchange.com/questions/27013/displaying-seconds-as-days-hours-mins-seconds
-		# Tweaked to support years and output the name of the file in question
+		# Tweaked to support years and to output the name of the file in question
 		local Y=$((age/365/60/60/24))
 		local D=$((age/365/60/60%24))
 		local H=$((age/60/60%24))
