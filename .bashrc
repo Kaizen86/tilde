@@ -101,8 +101,3 @@ fi
 # Set the default editor
 export EDITOR=/usr/bin/nano
 export VISUAL=$EDITOR # Crontab uses a different variable
-
-# Add 'thefuck' alias if it's installed on the system.
-if command -v thefuck &> /dev/null; then
-	eval "$(thefuck --alias)"
-fi
