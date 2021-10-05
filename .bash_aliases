@@ -140,9 +140,36 @@ alias q=exit
 alias ls='ls --color=auto'
 alias new='konsole &'
 alias ftp=lftp
+alias music-dl="youtube-dl -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s"
 
 # "MaKe and Change Directory"
 mkcd() { mkdir -p "$@" && cd "$@"; }
+
+# "Initialise ADBFS"
+init-adbfs()
+{
+	# Use either a manually specified mountpoint or the default in /run
+	if [ "$1" != "" ]; then 
+		mntdir="$1"
+	else
+		mntdir="/run/media/$(whoami)/Connor"
+	fi 
+
+	# Make the folder if it doesn't exist
+	if [ ! -d $mntdir ]; then
+		sudo mkdir "$mntdir" # Root must make it...
+		# But the current user must then own it.
+		sudo chown $(whoami) "$mntdir"
+	fi
+	# Double check if it worked
+	if [ -d $mntdir ]; then
+		# It did, proceed.
+		adbfs "$mntdir" -o auto_unmount -o fsname=Connor
+	else
+		# Error message
+		echo "Aborting, mountpoint couldn't be created."
+	fi
+}
 
 # Git shortcuts
 git()
