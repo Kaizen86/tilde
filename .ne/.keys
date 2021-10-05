@@ -1,0 +1,4 @@
+# Backspace key doesn't work by default, so this overrides the built-in config
+
+# todo: this shit doesn't work
+KEY 0x7f BackSpace
