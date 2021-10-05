@@ -115,6 +115,93 @@ autoremove() {
 	esac
 }
 
+# Allows automatically installing a collection of packages that I consider to be essential or optional
+initial-setup() {
+	# Warning message (only show for optionals/apps?)
+	echo -e "WARNING!\nYou are about to install a lot of packages onto your machine.\nOf course, this will require a lot of patience and a decent internet connection.\nSome packages will need to be installed via Pip, and if you're\nusing Arch then an AUR helper such as paru or yay will be needed."
+	select answer in "Confirm" "Cancel"
+	do
+		case $answer in
+			Confirm) break;;
+			Cancel) return;;
+		esac
+	done
+	echo "Proceeding"
+
+	# List of 'essential' packages to have:
+	packages-core=(
+		"coreutils (stat)"
+		"ncurses (tput)"
+		"ack"
+		"nano"
+		"ne"
+		"neofetch"
+		"python3"
+	)
+
+	# Pip packages that are useful to have
+	packages-pip=(
+		"pip_search"
+		"tw2.pygmentize"
+	)
+
+	# List of 'nice-to-have' packages, pick and choose.
+	# Note; some of these are on the AUR, so it's useful to have a helper like paru or yay for those
+	packages-optional = (
+		"adbfs-rootless-git"
+		"arduino"
+		"android-sdk-platform-tools"
+		"atom"
+		"audacity"
+		"bc"
+		"cdrdao"
+		"cool-retro-term"
+		"davinci-resolve"
+		"deja-dup"
+		"dos2unix"
+		"downgrade"
+		"dvd+rw-tools"
+		"filelight"
+		"firefox"
+		"ghex"
+		"gimp"
+		"git"
+		"gnome-disk-utility"
+		"htop"
+		"inetutils"
+		"iotop"
+		"kate"
+		"kdenlive"
+		"lftp"
+		"lshw"
+		"lynx"
+		"make"
+		"mediainfo"
+		"net-tools"
+		"nmap"
+		"noto-fonts-cjk"
+		"noto-fonts-emoji"
+		"ntfs-3g"
+		"obs-studio"
+		"plymouth"
+		"rsync"
+		"screen"
+		"spectacle"
+		"speedtest-cli"
+		"thunderbird"
+		"tmux"
+		"tree"
+		"ttf-windows"
+		"unrar"
+		"unzip"
+		"wget"
+		"xterm"
+		"yakuake"
+		"youtube-dl"
+		"zip"
+	)
+}
+
 # Python aliases
 alias python=python3
 alias py=python3
