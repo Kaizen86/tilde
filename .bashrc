@@ -99,5 +99,5 @@ else
 fi
 
 # Set the default editor
-export EDITOR=/usr/bin/nano
+export EDITOR=/usr/bin/ne
 export VISUAL=$EDITOR # Crontab uses a different variable
