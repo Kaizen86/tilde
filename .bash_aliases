@@ -118,7 +118,7 @@ autoremove() {
 # Allows automatically installing a collection of packages that I consider to be essential or optional
 initial-setup() {
 	# Warning message (only show for optionals/apps?)
-	echo -e "WARNING!\nYou are about to install a lot of packages onto your machine.\nOf course, this will require a lot of patience and a decent internet connection.\nSome packages will need to be installed via Pip, and if you're\nusing Arch then an AUR helper such as paru or yay will be needed."
+	echo -e "WARNING!\nYou are about to install a lot of packages onto your machine.\nOf course, this will require a lot of patience and a decent internet connection.\nSome packages will need to be installed via Pip, and if you're\nusing Arch then an AUR helper such as paru or yay will be needed.\n"
 	select answer in "Confirm" "Cancel"
 	do
 		case $answer in
@@ -129,7 +129,7 @@ initial-setup() {
 	echo "Proceeding"
 
 	# List of 'essential' packages to have:
-	packages-core=(
+	packages_core=(
 		"coreutils (stat)"
 		"ncurses (tput)"
 		"ack"
@@ -140,14 +140,14 @@ initial-setup() {
 	)
 
 	# Pip packages that are useful to have
-	packages-pip=(
+	packages_pip=(
 		"pip_search"
 		"tw2.pygmentize"
 	)
 
 	# List of 'nice-to-have' packages, pick and choose.
 	# Note; some of these are on the AUR, so it's useful to have a helper like paru or yay for those
-	packages-optional = (
+	packages_optional=(
 		"adbfs-rootless-git"
 		"arduino"
 		"android-sdk-platform-tools"
@@ -200,6 +200,8 @@ initial-setup() {
 		"youtube-dl"
 		"zip"
 	)
+	# TODO: Split some packages in Optional into their own category called Apps
+	# TODO: Write a loop to iterate over each package from all selected categories
 }
 
 # Python aliases
@@ -237,11 +239,11 @@ mkcd() { mkdir -p "$@" && cd "$@"; }
 init-adbfs()
 {
 	# Use either a manually specified mountpoint or the default in /run
-	if [ "$1" != "" ]; then 
+	if [ "$1" != "" ]; then
 		mntdir="$1"
 	else
 		mntdir="/run/media/$(whoami)/Connor"
-	fi 
+	fi
 
 	# Make the folder if it doesn't exist
 	if [ ! -d $mntdir ]; then
@@ -295,7 +297,7 @@ volume()
 	elif [ $# -eq 0 ]; then
 		# Output the current volume percentage if no argument was given
 
-		# TODO: amixer is a tricksy gremlin. 
+		# TODO: amixer is a tricksy gremlin.
 		# Find a way to reliably determine current volume %, with or without amixer.
 		echo "Volume readback not implemented"
 
