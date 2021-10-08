@@ -128,50 +128,37 @@ initial-setup() {
 	done
 	echo "Proceeding"
 
-	# List of 'essential' packages to have:
+	# List of 'essential' packages, any tool used in this file should be listed here.
 	packages_core=(
-		"coreutils (stat)"
-		"ncurses (tput)"
+		"coreutils" #stat
+		"ncurses" #tput
 		"ack"
-		"nano"
-		"ne"
+		"nano" # Kept as a fallback
+		"ne" # Nice Editor
 		"neofetch"
-		"python3"
+		"python3" # Dependency for packages_pip
 	)
 
-	# Pip packages that are useful to have
+	# Python packages that are useful to have. These are in their own category because pip is used to install them
 	packages_pip=(
 		"pip_search"
-		"tw2.pygmentize"
+		"tw2.pygmentize" #ccat
 	)
 
-	# List of 'nice-to-have' packages, pick and choose.
+	# List of 'nice-to-have' packages
 	# Note; some of these are on the AUR, so it's useful to have a helper like paru or yay for those
 	packages_optional=(
 		"adbfs-rootless-git"
-		"arduino"
 		"android-sdk-platform-tools"
-		"atom"
-		"audacity"
-		"bc"
+		"bc" # Basic Calculator
 		"cdrdao"
-		"cool-retro-term"
-		"davinci-resolve"
-		"deja-dup"
 		"dos2unix"
 		"downgrade"
 		"dvd+rw-tools"
-		"filelight"
-		"firefox"
-		"ghex"
-		"gimp"
 		"git"
-		"gnome-disk-utility"
 		"htop"
 		"inetutils"
 		"iotop"
-		"kate"
-		"kdenlive"
 		"lftp"
 		"lshw"
 		"lynx"
@@ -182,13 +169,9 @@ initial-setup() {
 		"noto-fonts-cjk"
 		"noto-fonts-emoji"
 		"ntfs-3g"
-		"obs-studio"
-		"plymouth"
 		"rsync"
 		"screen"
-		"spectacle"
 		"speedtest-cli"
-		"thunderbird"
 		"tmux"
 		"tree"
 		"ttf-windows"
@@ -196,11 +179,29 @@ initial-setup() {
 		"unzip"
 		"wget"
 		"xterm"
-		"yakuake"
 		"youtube-dl"
 		"zip"
 	)
-	# TODO: Split some packages in Optional into their own category called Apps
+	
+	packages_apps=(
+		"arduino"
+		"atom"
+		"audacity"
+		"cool-retro-term"
+		"davinci-resolve"
+		"deja-dup"
+		"filelight"
+		"firefox"
+		"ghex"
+		"gimp"
+		"gnome-disk-utility"
+		"kate"
+		"kdenlive"
+		"obs-studio"
+		"spectacle"
+		"thunderbird"
+		"yakuake"
+	)
 	# TODO: Write a loop to iterate over each package from all selected categories
 }
 
