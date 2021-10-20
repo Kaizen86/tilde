@@ -33,7 +33,7 @@ fetch() {
 			sudo apt-get install "${@:1}"
 			;;
 		pacman)
-			sudo pacman -Syu "${@:1}"
+			sudo pacman -S "${@:1}"
 			;;
 		*)
 			echo Unsupported package manager \""$PKG_MANAGER"\"
