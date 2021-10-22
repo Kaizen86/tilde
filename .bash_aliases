@@ -383,7 +383,7 @@ Try '${FUNCNAME[0]} --help' for more information"
 		local file_epoch=$(stat -c$format_code "$file")
 		# Is it 0? That means there was an error, usually.
 		if [ $file_epoch -eq 0 ]; then
-			printf '%s: <UNKNOWN>' "$file"
+			printf '%s: <UNKNOWN>\n' "$file"
 			continue
 		fi
 
