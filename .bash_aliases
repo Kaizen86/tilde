@@ -392,8 +392,8 @@ Try '${FUNCNAME[0]} --help' for more information"
 
 		# https://unix.stackexchange.com/questions/27013/displaying-seconds-as-days-hours-mins-seconds
 		# Tweaked to support years and to output the name of the file in question
-		local Y=$((age/365/60/60/24))
-		local D=$((age/365/60/60%24))
+		local Y=$((age/60/60/24/365))
+		local D=$((age/60/60/24%365))
 		local H=$((age/60/60%24))
 		local M=$((age/60%60))
 		local S=$((age%60))
