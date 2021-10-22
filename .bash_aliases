@@ -374,13 +374,13 @@ Try '${FUNCNAME[0]} --help' for more information"
 
 	for file in "${@:1}"; do
 		# Check if the file is even a file or directory
-		if [[ ! (-f $file || -d $file) ]]; then
+		if [[ ! (-f "$file" || -d "$file") ]]; then
 			echo ${FUNCNAME[0]}: \'$file\' does not exist
 			continue
 		fi
 
 		# Use stat to read the file's age field, according to which one the user wants.
-		local file_epoch=$(stat -c$format_code $file)
+		local file_epoch=$(stat -c$format_code "$file")
 		# Is it 0? That means there was an error, usually.
 		if [ $file_epoch -eq 0 ]; then
 			printf '%s: <UNKNOWN>' "$file"
