@@ -137,6 +137,9 @@ initial-setup() {
 		"ne" # Nice Editor
 		"neofetch"
 		"python3" # Dependency for packages_pip
+		"rsync"
+		"tar"
+		"wget"
 	)
 
 	# Python packages that are useful to have. These are in their own category because pip is used to install them
@@ -155,7 +158,10 @@ initial-setup() {
 		"dos2unix"
 		"downgrade"
 		"dvd+rw-tools"
+		"exfatprogs"
+		"ffmpeg"
 		"git"
+		"grub-customizer"
 		"htop"
 		"inetutils"
 		"iotop"
@@ -169,40 +175,57 @@ initial-setup() {
 		"noto-fonts-cjk"
 		"noto-fonts-emoji"
 		"ntfs-3g"
-		"rsync"
+		"nvme-cli"
+		"scrcpy"
 		"screen"
+		"sox"
 		"speedtest-cli"
 		"tmux"
 		"tree"
 		"ttf-windows"
 		"unrar"
 		"unzip"
-		"wget"
 		"xterm"
 		"youtube-dl"
 		"zip"
 	)
 	
+	# List of GUI applications
 	packages_apps=(
 		"arduino"
+		"ark"
 		"atom"
 		"audacity"
+		"bitwarden"
 		"cool-retro-term"
 		"davinci-resolve"
 		"deja-dup"
+		"elisa"
 		"filelight"
 		"firefox"
 		"ghex"
 		"gimp"
 		"gnome-disk-utility"
+		"gwenview"
 		"kate"
 		"kdenlive"
+		"kompare"
+		"konsole"
+		"ksysguard"
+		"minecraft-launcher"
 		"obs-studio"
+		"partitionmanager"
 		"spectacle"
+		"speedcrunch"
+		"steam"
+		"teams"
 		"thunderbird"
-		"yakuake"
+		"transmission-gtk"
+		"xfburn"
 	)
-	# TODO: Write a loop to iterate over each package from all selected categories
+	# TODO: Include autoselect/descriptions for categories and packages within the categories.
+	# TODO: Show a menu to select categories with nested entries to fine-tune package selection.
+	# TODO: For all selected packages from the aforementioned menu, attempt to install each one.
 }
 
 # Python aliases
