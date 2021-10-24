@@ -5,9 +5,7 @@
     fontFamily: "Noto Sans Mono"
     fontSize: 17
     showIndentGuide: true
-    softTabs: false
-    tabLength: 4
-    tabType: "hard"
+    tabType: "soft"
   "exception-reporting":
     userId: "e4ff2e73-552d-46da-941d-0818f70ed2a0"
   "highlight-line":
