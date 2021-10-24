@@ -240,7 +240,6 @@ END_COMMENT
 		xfburn\
 	"
 	
-	# TODO: Include autoselect/descriptions for categories and packages within the categories.
 	# TODO: Show a menu to select categories with nested entries to fine-tune package selection.
 	# TODO: For all selected packages from the aforementioned menu, attempt to install each one.
 	
