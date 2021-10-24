@@ -141,6 +141,9 @@ initial-setup() {
   done
   echo "Proceeding"
 END_COMMENT
+
+  # Manually ordered list of package categories
+  local package_categories=(core pip optional apps)
   
   declare -A packages # Dictionary of strings, which will be treated as lists.
   
@@ -242,16 +245,52 @@ END_COMMENT
   
   # TODO: Show a menu to select categories with nested entries to fine-tune package selection.
   # TODO: For all selected packages from the aforementioned menu, attempt to install each one.
+
+  # Associative array to keep track of selections
+  declare -A selections
+  
+  # TODO: Automatically select all from core and pip
   
   # Whiptail configurations
-  TITLE="Powercord Theme Manager"
-  SIZE="25 80 17"
-
+  local TITLE="Package Selection"
+  local SIZE="$(( $LINES-20)) $(( $COLUMNS-20 )) $(( $LINES-30 ))" # Dynamic box size
+  
   # Category menu
-  #while true; 
-    echo "${!packages[@]}"
-  # Did that work?
-  #if [ $? -ne 0 ]; then
+  while true; do
+    # Construct list of options to present to the user
+    local menu_options="" # Clear list
+    for i in "${package_categories[@]}"
+    do
+      # TODO: Option for select/remove all should be put here
+      # "$i_all" "  Remove all"
+      menu_options=$menu_options"$i $i "
+    done
+    menu_options=$menu_options"INSTALL -=Install=-"
+    
+    exec 3> /tmp/whiptail_stderr # Open an IO stream into a temporary file
+
+    # Show the main menu, redirecting its stderr to our temporary file
+    whiptail --notags\
+      --backtitle "$TITLE" --title "$TITLE"\
+      --ok-button "Select" --cancel-button "Abort"\
+      --menu "Main menu" $SIZE\
+      -- $menu_options # Standalone -- to escape the rest of the command
+    
+    wtcode=$? # Store the return code
+    exec 3>&- # Close the IO stream
+    
+    # Detect if the Abort button was pressed
+    if [[ $wtcode -ne 0 ]]; then
+      return # Do not proceed
+    fi
+    
+    # Read the temporary file into a variable and tidy up
+    choice=$(tr -d '"' < /tmp/whiptail_stderr)
+    rm /tmp/whiptail_stderr
+    
+    # TODO: "INSTALL" choice should exit the loop and install any packages
+    echo $choice
+  done
 }
 
 # Python aliases
