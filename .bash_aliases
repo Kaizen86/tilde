@@ -243,6 +243,13 @@ END_COMMENT
 	# TODO: Show a menu to select categories with nested entries to fine-tune package selection.
 	# TODO: For all selected packages from the aforementioned menu, attempt to install each one.
 	
+	# Whiptail configurations
+	TITLE="Powercord Theme Manager"
+	SIZE="25 80 17"
+
+	# Category menu
+	#while true; 
+		echo "${!packages[@]}"
 	# Did that work?
 	#if [ $? -ne 0 ]; then
 }
