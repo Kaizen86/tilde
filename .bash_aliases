@@ -289,6 +289,8 @@ END_COMMENT
     rm /tmp/whiptail_stderr
     
     # TODO: "INSTALL" choice should exit the loop and install any packages
+    # TODO: Choice ending in _all should select/remove all packages in the category
+    # TODO: Anything else should display a checkbox menu for all the packages in that category
     echo $choice
   done
 }
@@ -301,8 +303,7 @@ alias pip=pip3
 if ! [ -x "$(command -v pip_search)" ]; then
   echo "Warning - pip_search is not installed. 'pip3 search' will not function."
 fi
-pip3() # Rest in peace 'pip3 search'.
-{
+pip3() { # Rest in peace 'pip3 search'.
   if [ "$1" == "search" ]; then
     # Run pip_search with the remaining arguments, piped into more.
     pip_search "${@:2}" | more
@@ -313,7 +314,7 @@ pip3() # Rest in peace 'pip3 search'.
   fi
 }
 
-# Misc
+# Miscellaneous aliases
 alias q=exit
 alias ls='ls --color=auto'
 alias new='konsole &'
@@ -322,11 +323,9 @@ alias music-dl="youtube-dl -ciwx --audio-format mp3 --embed-thumbnail --add-meta
 alias ne='ne --utf8 --ansi --keys ~/.ne/backspacefix.keys' # nice-editor
 
 # "MaKe and Change Directory"
-mkcd() { mkdir -p "$@" && cd "$@"; }
+mkcd() { mkdir -p "$@" && cd "$@" }
 
-# "Initialise ADBFS"
-init-adbfs()
-{
+init-adbfs() { # "Initialise ADBFS"
   # Use either a manually specified mountpoint or the default in /run
   if [ "$1" != "" ]; then
     mntdir="$1"
@@ -350,9 +349,7 @@ init-adbfs()
   fi
 }
 
-# Git shortcuts
-git()
-{
+git() { # Git shortcuts
   local git_exec=$(which git) # Determine path to git
   if [ "$1" == "clone" ]; then
     # Clone the repository then cd into it
@@ -366,18 +363,16 @@ git()
   fi
 }
 
-# Its like cat but with syntax highlighting. pygmentize is part of the python-pygments package
-ccat()
-{
+ccat() { # Its like cat, but with syntax highlighting. 
+  # pygmentize is part of the python-pygments package
+  
   # Swap instances of 'pygmentize' in the stderr to the function name to avoid breaking the illusion
   # https://stackoverflow.com/questions/3618078/pipe-only-stderr-through-a-filter/52575087#52575087
   pygmentize -g -O style=monokai "$@" 2> >(sed -e "s/pygmentize/${FUNCNAME[0]}/g" >&2)
 }
 
-# System volume adjustment/readback tool
-# NOTE: This uses amixer, so be sure to install alsa-utils.
-volume()
-{
+volume() { # System volume adjustment/readback tool
+  # NOTE: This uses amixer, so be sure to install alsa-utils.
   if [[ $1 == *-h* ]]; then  # Determine if "-h" appears in the argument. This matches -h and --help
     # Help text
     echo "Usage: ${FUNCNAME[0]} [value]"
@@ -403,9 +398,7 @@ volume()
   fi
 }
 
-# Calculates the age of files/directories and displays it in a human-readable format
-when()
-{
+when() { # Calculates the age of files/directories and displays it in a human-readable format
   # Parse the first argument, if any.
   case "$1" in
 
@@ -495,7 +488,7 @@ Try '${FUNCNAME[0]} --help' for more information"
   done
 }
 
-# KDE lock/unlock/logout commands
+# KDE session management aliases
 alias lock='loginctl lock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
 alias unlock='loginctl unlock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
 alias logout='qdbus org.kde.ksmserver /KSMServer logout 0 0 0'
