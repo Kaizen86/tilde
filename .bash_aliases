@@ -2,7 +2,7 @@
 # ~/.bash_aliases
 #
 
-# This file contains various functions and aliases I frequently use to make tasks significantly easier
+# This file contains a plethora of aliases and functions I frequently use
 
 # Package manager shortcuts
 # Warning if package manager is undefined
@@ -14,15 +14,36 @@ fi
 alias less='less -r'
 alias ls='ls --color'
 alias grep='grep --colour=always'
-# HighLight alias for ack with passthrough
+
+# Python aliases
+alias python=python3
+alias py=python3
+alias pip=pip3
+
+# Miscellaneous aliases
+alias q=exit
+alias ls='ls --color=auto'
+alias new='konsole &'
+alias ftp=lftp
+alias music-dl="youtube-dl -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s"
+alias ne='ne --utf8 --ansi --keys ~/.ne/backspacefix.keys' # nice-editor
+
+# KDE session management aliases
+alias lock='loginctl lock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
+alias unlock='loginctl unlock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
+alias logout='qdbus org.kde.ksmserver /KSMServer logout 0 0 0'
+
+# === Function definitions past this point ===
+
+# HighLight function for ack with passthrough
 if [ -x "$(command -v ack)" ]; then
   hl() {
-    ack --passthru $@ # First command receives the stream
+    ack --passthru $@
   }
 else
   echo "Warning - ack is not installed. 'hl' will not provide colours."
   hl() {
-    cat # First command receives the stream
+    cat # Just so that it will at least show output
   }
 fi
 
@@ -129,7 +150,7 @@ initial-setup() {
     return
   fi
   
-  : <<'END_COMMENT'
+  : <<'  END_COMMENT'
   # Warning message (only show for optionals/apps?)
   echo -e "WARNING!\nYou are about to install a lot of packages onto your machine.\nOf course, this will require a lot of patience and a decent internet connection.\nSome packages will need to be installed via Pip, and if you're\nusing Arch then an AUR helper such as paru or yay will be needed.\n"
   select answer in "Confirm" "Cancel"
@@ -140,7 +161,7 @@ initial-setup() {
     esac
   done
   echo "Proceeding"
-END_COMMENT
+  END_COMMENT
 
   # Manually ordered list of package categories
   local package_categories=(core pip optional apps)
@@ -295,11 +316,6 @@ END_COMMENT
   done
 }
 
-# Python aliases
-alias python=python3
-alias py=python3
-alias pip=pip3
-
 if ! [ -x "$(command -v pip_search)" ]; then
   echo "Warning - pip_search is not installed. 'pip3 search' will not function."
 fi
@@ -313,14 +329,6 @@ pip3() { # Rest in peace 'pip3 search'.
     $pip_exec "$@"
   fi
 }
-
-# Miscellaneous aliases
-alias q=exit
-alias ls='ls --color=auto'
-alias new='konsole &'
-alias ftp=lftp
-alias music-dl="youtube-dl -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s"
-alias ne='ne --utf8 --ansi --keys ~/.ne/backspacefix.keys' # nice-editor
 
 # "MaKe and Change Directory"
 mkcd() { mkdir -p "$@" && cd "$@"; }
@@ -488,7 +496,4 @@ Try '${FUNCNAME[0]} --help' for more information"
   done
 }
 
-# KDE session management aliases
-alias lock='loginctl lock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
-alias unlock='loginctl unlock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
-alias logout='qdbus org.kde.ksmserver /KSMServer logout 0 0 0'
+
