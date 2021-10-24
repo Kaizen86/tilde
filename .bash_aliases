@@ -7,7 +7,7 @@
 # Package manager shortcuts
 # Warning if package manager is undefined
 if [ -z "$PKG_MANAGER" ]; then
-  echo "Warning - \$PKG_MANAGER is not set!"
+  echo "Warning - \$PKG_MANAGER is not set! Your distro isn't supported at the moment."
 fi
 
 # Force colour mode for less, ls, and grep
@@ -47,8 +47,13 @@ else
   }
 fi
 
-# Install one or more packages
-fetch() {
+__show_pkgmanager_error() { # Hidden function that shows a message explaining how to correct unsupported PKG_MANAGER issues
+  echo -e "Error: no compatible package manager was detected. This is caused by a lack of support for your distro's package manager.\n\nTo fix this, navigate to the section in .bashrc responsible for setting \$PKG_MANAGER and uncomment the appropriate line.\nThen, extend the functionality of the package management functions contained in .bash_aliases.\nOnce these steps are done, reload the changes either through the source command or by restarting the terminal.\n\nPlease submit consider submitting extensions you make to the repo, that would be greatly appreciated!"
+}
+
+# Package management functions
+
+fetch() { # Installs packages
   case $PKG_MANAGER in
     apt-get)
       sudo apt-get install "${@:1}"
@@ -57,12 +62,10 @@ fetch() {
       sudo pacman -S "${@:1}"
       ;;
     *)
-      echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
-      return
+      __show_pkgmanager_error
   esac
 }
-# Remove one or more packages, as well as any orphaned dependencies associated with the package(s)
-purge() {
+purge() { # Removes packages, as well as any orphaned dependencies
   case $PKG_MANAGER in
     apt-get)
       sudo apt-get purge "${@:1}"
@@ -71,12 +74,10 @@ purge() {
       sudo pacman -Rs "${@:1}";
       ;;
     *)
-      echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
-      return
+      __show_pkgmanager_error
   esac
 }
-# Searches for one or more packages
-findme() {
+findme() { # Searches for packages in the local database
   for package in "${@:1}"; do
     case $PKG_MANAGER in
       apt-get)
@@ -86,13 +87,11 @@ findme() {
         pacman -Ss "$package" | hl "$package"
         ;;
       *)
-        echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
-        return
+        __show_pkgmanager_error
     esac
   done
 }
-# Syncs package database
-update() {
+update() { # Synchronises local package database
   case $PKG_MANAGER in
     apt-get)
       sudo apt-get update
@@ -101,11 +100,10 @@ update() {
       sudo pacman -Syy
       ;;
     *)
-      echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
+      __show_pkgmanager_error
   esac
 }
-# Performs an upgrade of all packages
-upgrade() {
+upgrade() { # Performs an upgrade of all packages
   case $PKG_MANAGER in
     apt-get)
       sudo apt-get upgrade
@@ -114,11 +112,10 @@ upgrade() {
       sudo pacman -Syu
       ;;
     *)
-      echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
+      __show_pkgmanager_error
   esac
 }
-# Automatically removes orphaned packages
-autoremove() {
+autoremove() { # Automatically removes orphaned packages
   case $PKG_MANAGER in
     apt-get)
       sudo apt-get autoremove
@@ -132,7 +129,7 @@ autoremove() {
       fi
       ;;
     *)
-      echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
+      __show_pkgmanager_error
   esac
 }
 
@@ -140,7 +137,7 @@ autoremove() {
 initial-setup() {
   # Check that a package manager has been detected.
   if [ ! "$PKG_MANAGER" ]; then
-    echo -e "Error: no package manager was detected, cannot possibly autoinstall packages.\nTo fix this, please investigate .bashrc to determine why \$PKG_MANAGER is not being set."
+    __show_pkgmanager_error
     return
   fi
 
