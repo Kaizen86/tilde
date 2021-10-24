@@ -36,7 +36,7 @@ fetch() {
 			sudo pacman -S "${@:1}"
 			;;
 		*)
-			echo Unsupported package manager \""$PKG_MANAGER"\"
+			echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
 			return
 	esac
 }
@@ -50,7 +50,7 @@ purge() {
 			sudo pacman -Rs "${@:1}";
 			;;
 		*)
-			echo Unsupported package manager \""$PKG_MANAGER"\"
+			echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
 			return
 	esac
 }
@@ -65,7 +65,7 @@ findme() {
 				pacman -Ss "$package" | hl "$package"
 				;;
 			*)
-				echo Unsupported package manager \""$PKG_MANAGER"\"
+				echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
 				return
 		esac
 	done
@@ -80,7 +80,7 @@ update() {
 			sudo pacman -Syy
 			;;
 		*)
-			echo Unsupported package manager \""$PKG_MANAGER"\"
+			echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
 	esac
 }
 # Performs an upgrade of all packages
@@ -93,7 +93,7 @@ upgrade() {
 			sudo pacman -Syu
 			;;
 		*)
-			echo Unsupported package manager \""$PKG_MANAGER"\"
+			echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
 	esac
 }
 # Automatically removes orphaned packages
@@ -111,7 +111,7 @@ autoremove() {
 			fi
 			;;
 		*)
-			echo Unsupported package manager \""$PKG_MANAGER"\"
+			echo ${FUNCNAME[0]}: Unsupported package manager \""$PKG_MANAGER"\"
 	esac
 }
 
