@@ -115,8 +115,9 @@ autoremove() {
 	esac
 }
 
-# Allows automatically installing a collection of packages that I consider to be essential or optional
+# Allows automatically installing a collection of packages that I would consider to be essential or useful
 initial-setup() {
+	: <<'END_COMMENT'
 	# Warning message (only show for optionals/apps?)
 	echo -e "WARNING!\nYou are about to install a lot of packages onto your machine.\nOf course, this will require a lot of patience and a decent internet connection.\nSome packages will need to be installed via Pip, and if you're\nusing Arch then an AUR helper such as paru or yay will be needed.\n"
 	select answer in "Confirm" "Cancel"
@@ -127,105 +128,112 @@ initial-setup() {
 		esac
 	done
 	echo "Proceeding"
-
+END_COMMENT
+	
+	declare -A packages # Dictionary of strings, which will be treated as lists.
+	
 	# List of 'essential' packages, any tool used in this file should be listed here.
-	packages_core=(
-		"coreutils" #stat
-		"ncurses" #tput
-		"ack"
-		"nano" # Kept as a fallback
-		"ne" # Nice Editor
-		"neofetch"
-		"python3" # Dependency for packages_pip
-		"rsync"
-		"tar"
-		"wget"
-	)
+	packages[core]="\
+		coreutils\
+		ncurses\
+		ack\
+		nano\
+		ne\
+		neofetch\
+		python3\
+		rsync\
+		tar\
+		wget\
+	"
 
 	# Python packages that are useful to have. These are in their own category because pip is used to install them
-	packages_pip=(
-		"pip_search"
-		"tw2.pygmentize" #ccat
-	)
+	packages[pip]="\
+		pip_search\
+		tw2.pygmentize\
+	"
 
 	# List of 'nice-to-have' packages
 	# Note; some of these are on the AUR, so it's useful to have a helper like paru or yay for those
-	packages_optional=(
-		"adbfs-rootless-git"
-		"android-sdk-platform-tools"
-		"bc" # Basic Calculator
-		"cdrdao"
-		"dos2unix"
-		"downgrade"
-		"dvd+rw-tools"
-		"exfatprogs"
-		"ffmpeg"
-		"git"
-		"grub-customizer"
-		"htop"
-		"inetutils"
-		"iotop"
-		"lftp"
-		"lshw"
-		"lynx"
-		"make"
-		"mediainfo"
-		"net-tools"
-		"nmap"
-		"noto-fonts-cjk"
-		"noto-fonts-emoji"
-		"ntfs-3g"
-		"nvme-cli"
-		"scrcpy"
-		"screen"
-		"sox"
-		"speedtest-cli"
-		"tmux"
-		"tree"
-		"ttf-windows"
-		"unrar"
-		"unzip"
-		"xterm"
-		"youtube-dl"
-		"zip"
-	)
+	packages[optional]="\
+		adbfs-rootless-git\
+		android-sdk-platform-tools\
+		bc\
+		cdrdao\
+		dos2unix\
+		downgrade\
+		dvd+rw-tools\
+		exfatprogs\
+		ffmpeg\
+		git\
+		grub-customizer\
+		htop\
+		inetutils\
+		iotop\
+		lftp\
+		lshw\
+		lynx\
+		make\
+		mediainfo\
+		net-tools\
+		nmap\
+		noto-fonts-cjk\
+		noto-fonts-emoji\
+		ntfs-3g\
+		nvme-cli\
+		scrcpy\
+		screen\
+		sox\
+		speedtest-cli\
+		tmux\
+		tree\
+		ttf-windows\
+		unrar\
+		unzip\
+		xterm\
+		youtube-dl\
+		zip\
+	"
 	
 	# List of GUI applications
-	packages_apps=(
-		"arduino"
-		"ark"
-		"atom"
-		"audacity"
-		"bitwarden"
-		"cool-retro-term"
-		"davinci-resolve"
-		"deja-dup"
-		"elisa"
-		"filelight"
-		"firefox"
-		"ghex"
-		"gimp"
-		"gnome-disk-utility"
-		"gwenview"
-		"kate"
-		"kdenlive"
-		"kompare"
-		"konsole"
-		"ksysguard"
-		"minecraft-launcher"
-		"obs-studio"
-		"partitionmanager"
-		"spectacle"
-		"speedcrunch"
-		"steam"
-		"teams"
-		"thunderbird"
-		"transmission-gtk"
-		"xfburn"
-	)
+	packages[apps]="\
+		arduino\
+		ark\
+		atom\
+		audacity\
+		bitwarden\
+		cool-retro-term\
+		davinci-resolve\
+		deja-dup\
+		elisa\
+		filelight\
+		firefox\
+		ghex\
+		gimp\
+		gnome-disk-utility\
+		gwenview\
+		kate\
+		kdenlive\
+		kompare\
+		konsole\
+		ksysguard\
+		minecraft-launcher\
+		obs-studio\
+		partitionmanager\
+		spectacle\
+		speedcrunch\
+		steam\
+		teams\
+		thunderbird\
+		transmission-gtk\
+		xfburn\
+	"
+	
 	# TODO: Include autoselect/descriptions for categories and packages within the categories.
 	# TODO: Show a menu to select categories with nested entries to fine-tune package selection.
 	# TODO: For all selected packages from the aforementioned menu, attempt to install each one.
+	
+	# Did that work?
+	#if [ $? -ne 0 ]; then
 }
 
 # Python aliases
