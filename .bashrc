@@ -24,13 +24,19 @@ export GPG_TTY=$(tty)
 # Determine script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-# Determine the system's package manager
 declare -A osInfo; # Associative array to match files with a package manager
-osInfo[/etc/redhat-release]=yum
-osInfo[/etc/arch-release]=pacman
-osInfo[/etc/gentoo-release]=emerge
-osInfo[/etc/SuSE-release]=zypp
-osInfo[/etc/debian_version]=apt-get
+# Short list of possible release files and what package manager they indicate
+  osInfo[/etc/arch-release]=pacman #Arch
+  osInfo[/etc/debian_*]=apt-get #debian
+  # The rest of these are examples, I don't use any of these.
+  #osInfo[/etc/fedora-release]=dnf #Fedora
+  #osInfo[/etc/gentoo-release]=emerge #Gentoo
+  #osInfo[/etc/novell-release]=zypper #SuSE
+  #osInfo[/etc/redhat*]=yum #Red Hat Enterprise Linux
+  #osInfo[/etc/sles-release]=zypper #SuSE
+  #osInfo[/etc/SuSE-release]=zypper #SuSE
+  #osInfo[/etc/synoinfo.conf]=synopkg #Synology
+
 for f in ${!osInfo[@]} # Iterate over each entry
 do
   if [[ -f $f ]]; then # Test for the file in question
