@@ -323,7 +323,7 @@ alias music-dl="youtube-dl -ciwx --audio-format mp3 --embed-thumbnail --add-meta
 alias ne='ne --utf8 --ansi --keys ~/.ne/backspacefix.keys' # nice-editor
 
 # "MaKe and Change Directory"
-mkcd() { mkdir -p "$@" && cd "$@" }
+mkcd() { mkdir -p "$@" && cd "$@"; }
 
 init-adbfs() { # "Initialise ADBFS"
   # Use either a manually specified mountpoint or the default in /run
