@@ -117,6 +117,18 @@ autoremove() {
 
 # Allows automatically installing a collection of packages that I would consider to be essential or useful
 initial-setup() {
+	# Check that a package manager has been detected.
+	if [ ! "$PKG_MANAGER" ]; then
+		echo -e "Error: no package manager was detected, cannot possibly autoinstall packages.\nTo fix this, please investigate .bashrc to determine why \$PKG_MANAGER is not being set."
+		return
+	fi
+
+	# Verify that whiptail is available on the system
+	if [ ! "$(command -v whiptail)" ]; then
+		echo "Error: whiptail is not installed."
+		return
+	fi
+	
 	: <<'END_COMMENT'
 	# Warning message (only show for optionals/apps?)
 	echo -e "WARNING!\nYou are about to install a lot of packages onto your machine.\nOf course, this will require a lot of patience and a decent internet connection.\nSome packages will need to be installed via Pip, and if you're\nusing Arch then an AUR helper such as paru or yay will be needed.\n"
