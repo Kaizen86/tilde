@@ -459,11 +459,14 @@ initial-setup() {
   while true; do
     # Construct list of options to present to the user
     local menu_options="" # Clear list
-    for i in "${package_categories[@]}"
+    for c in "${package_categories[@]}"
     do
       # TODO: Option for select/remove all should be put here
       # "$i_all" "  Remove all"
-      menu_options=$menu_options"$i $i "
+      [[ "${selections[$c]}" == "" ]] && toggleword=Select || toggleword=Remove # Choose Remove or Select
+      toggle=" ╔$toggleword all" # Weird space characters used to work around shell expansion
+      menu_options=$menu_options"${c}_all ${toggle} "
+      menu_options=$menu_options"$c $c "
     done
     menu_options=$menu_options"INSTALL -=Install=-"
     
@@ -474,7 +477,7 @@ initial-setup() {
       --backtitle "$TITLE" --title "$TITLE"\
       --ok-button "Select" --cancel-button "Abort"\
       --menu "Main menu" $SIZE\
-      -- $menu_options # Standalone -- to escape the rest of the command
+      -- $menu_options 2>&3  # Standalone -- to escape the rest of the command
     
     wtcode=$? # Store the return code
     exec 3>&- # Close the IO stream
@@ -488,9 +491,26 @@ initial-setup() {
     choice=$(tr -d '"' < /tmp/whiptail_stderr)
     rm /tmp/whiptail_stderr
     
-    # TODO: "INSTALL" choice should exit the loop and install any packages
-    # TODO: Choice ending in _all should select/remove all packages in the category
-    # TODO: Anything else should display a checkbox menu for all the packages in that category
-    echo $choice
+    if [[ "$choice" == "INSTALL" ]]; then
+      # "INSTALL" choice should exit the loop, proceeding to install any packages
+      break
+    elif [[ "$choice" == *_all ]]; then
+      # Choice ending in _all should select/remove all packages in the category
+      category=$(cut -f1 -d_ <<< $choice) # Strip _all from string
+      if [ "${selections[$category]}" ]; then # Are there any selections?
+        # Yes, remove all.
+        selections[$category]=
+      else
+        # No, add all
+        selections[$category]=${packages[$category]}
+      fi
+    else
+      # Anything else should display a checkbox menu for all the packages in that category
+      echo "else"
+    fi
+    
   done
+  
+  # TODO: Install all selected packages
+  # for p in selections
 }
