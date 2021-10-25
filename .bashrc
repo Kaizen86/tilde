@@ -21,9 +21,6 @@ export PATH=$PATH:/home/daniel/.local/bin
 # Ensure GPG is configured correctly
 export GPG_TTY=$(tty)
 
-# Determine script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-
 declare -A osInfo; # Associative array to match files with a package manager
 # Short list of possible release files and what package manager they indicate
   osInfo[/etc/arch-release]=pacman #Arch
@@ -46,10 +43,11 @@ do
 done
 unset osInfo # We don't need this anymore
 
+# Determine script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # Run the aliases file if it exists
-if [ -f "$SCRIPT_DIR/.bash_aliases" ]; then
-  . "$SCRIPT_DIR/.bash_aliases"
-fi
+[ -f "$SCRIPT_DIR/.bash_aliases" ] && . "$SCRIPT_DIR/.bash_aliases"
 
 # Test for the existence of tput, which is necessary for colours.
 if [ -x /usr/bin/tput ]; then
@@ -105,5 +103,5 @@ else
 fi
 
 # Set the default editor
-export EDITOR=/usr/bin/ne
+export EDITOR=/usr/bin/nano
 export VISUAL=$EDITOR # Crontab uses a different variable
