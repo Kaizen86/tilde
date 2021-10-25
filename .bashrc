@@ -10,6 +10,9 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
   neofetch
 fi
 
+# Detect and warn about problematic locale
+[ "$LANG" == C ] && echo "Warning - Your locale is set to C. This can cause issues in some programs."
+
 # Me increasing the history file limit tenfold:
 # https://www.youtube.com/watch?v=VtJUHGjVm0E
 HISTFILESIZE=5000
