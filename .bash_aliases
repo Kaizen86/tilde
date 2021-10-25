@@ -463,11 +463,12 @@ initial-setup() {
     # Construct list of options to present to the user
     local menu_options="" # Clear list
     for category in "${package_categories[@]}"; do
-      # TODO: Option for select/remove all should be put here
-      # "$i_all" "  Remove all"
-      [[ "${selections[$category]}" == "" ]] && toggleword=Select || toggleword=Remove # Choose Remove or Select
+      # Options for select/remove all
+      [[ "${selections[$category]}" == "" ]] && toggleword="□Select" || toggleword="▣Remove" # Choose Remove or Select
       toggle=" ╔$toggleword all" # Weird space characters used to work around shell expansion
+      # Append toggle to menu options
       menu_options+="${category}_all ${toggle} "
+      # Also add the category entry
       menu_options+="$category $category "
     done
     menu_options=$menu_options"INSTALL -=Install=-"
