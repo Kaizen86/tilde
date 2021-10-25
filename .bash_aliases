@@ -344,11 +344,13 @@ initial-setup() {
 
   # Manually ordered list of package categories
   local package_categories=(core pip optional apps)
-  
-  declare -A packages # Dictionary of strings, which will be treated as lists.
+
+  # Associative arrays to keep track of all packages and user selections
+  declare -A packages
+  declare -A selections
   
   # List of 'essential' packages, any tool used in this file should be listed here.
-  packages[core]="\
+  packages[core]=$(echo "\
     coreutils\
     ncurses\
     ack\
@@ -359,17 +361,17 @@ initial-setup() {
     rsync\
     tar\
     wget\
-  "
+  " | xargs)
 
   # Python packages that are useful to have. These are in their own category because pip is used to install them
-  packages[pip]="\
+  packages[pip]=$(echo "\
     pip_search\
     tw2.pygmentize\
-  "
+  " | xargs)
 
   # List of 'nice-to-have' packages
   # Note; some of these are on the AUR, so it's useful to have a helper like paru or yay for those
-  packages[optional]="\
+  packages[optional]=$(echo "\
     adbfs-rootless-git\
     android-sdk-platform-tools\
     bc\
@@ -407,10 +409,10 @@ initial-setup() {
     xterm\
     youtube-dl\
     zip\
-  "
+  " | xargs)
   
   # List of GUI applications
-  packages[apps]="\
+  packages[apps]=$(echo "\
     arduino\
     ark\
     atom\
@@ -441,22 +443,19 @@ initial-setup() {
     thunderbird\
     transmission-gtk\
     xfburn\
-  "
+  " | xargs)
   
   # TODO: Show a menu to select categories with nested entries to fine-tune package selection.
   # TODO: For all selected packages from the aforementioned menu, attempt to install each one.
-
-  # Associative array to keep track of selections
-  declare -A selections
   
   # TODO: Automatically select all from core and pip
-  
-  # Whiptail configurations
-  local TITLE="Package Selection"
-  local SIZE="$(( $LINES-20)) $(( $COLUMNS-20 )) $(( $LINES-30 ))" # Dynamic box size
-  
-  # Category menu
+    
+  # Main menu loop
   while true; do
+    # Whiptail configurations
+    local TITLE="Package Selection"
+    local SIZE="$(( $LINES-20)) $(( $COLUMNS-20 )) $(( $LINES-30 ))" # Dynamic box size
+    
     # Construct list of options to present to the user
     local menu_options="" # Clear list
     for c in "${package_categories[@]}"
@@ -465,13 +464,13 @@ initial-setup() {
       # "$i_all" "  Remove all"
       [[ "${selections[$c]}" == "" ]] && toggleword=Select || toggleword=Remove # Choose Remove or Select
       toggle=" ╔$toggleword all" # Weird space characters used to work around shell expansion
-      menu_options=$menu_options"${c}_all ${toggle} "
-      menu_options=$menu_options"$c $c "
+      menu_options+="${c}_all ${toggle} "
+      menu_options+="$c $c "
     done
     menu_options=$menu_options"INSTALL -=Install=-"
     
     exec 3> /tmp/whiptail_stderr # Open an IO stream into a temporary file
-
+    
     # Show the main menu, redirecting its stderr to our temporary file
     whiptail --notags\
       --backtitle "$TITLE" --title "$TITLE"\
@@ -491,13 +490,14 @@ initial-setup() {
     choice=$(tr -d '"' < /tmp/whiptail_stderr)
     rm /tmp/whiptail_stderr
     
+    # Choice selection logic
+    category=$(cut -f1 -d_ <<< $choice) # Strip _all from string
     if [[ "$choice" == "INSTALL" ]]; then
       # "INSTALL" choice should exit the loop, proceeding to install any packages
       break
     elif [[ "$choice" == *_all ]]; then
       # Choice ending in _all should select/remove all packages in the category
-      category=$(cut -f1 -d_ <<< $choice) # Strip _all from string
-      if [ "${selections[$category]}" ]; then # Are there any selections?
+      if [ "${selections[$category]}" ]; then # Are there any selections present?
         # Yes, remove all.
         selections[$category]=
       else
@@ -506,9 +506,51 @@ initial-setup() {
       fi
     else
       # Anything else should display a checkbox menu for all the packages in that category
-      echo "else"
+      TITLE="$TITLE"" > ""$category" # Append category name to whiptail title
+      
+      unset menu_options # Reset list of options
+      i=0
+      SAVEIFS=$IFS # Make a backup of the IFS
+      IFS=' ' read -r -a array <<< "${packages[$category]}" # Split string into array
+      for package in "${array[@]}"; do
+        menu_options[i]=$(( i/3 )) # Entry number
+        menu_options[i+1]="$package" # Package name
+
+        # Having the menus remember what the user selected lines up with their expectation of persistency
+        # A substring comparison matches selections against package name. It does *not* work the other way around.
+        [[ "${selections[$category]}" == *"$package"* ]] && menu_options[i+2]="ON" || menu_options[i+2]="OFF"
+
+        # Pad package name to create a margin on the right of the items
+        menu_options[i+1]="${menu_options[i+1]}  "
+
+        ((i+=3)) # Increment index counter
+      done
+      IFS=$SAVEIFS # Restore IFS to previous value
+      
+      exec 3> /tmp/whiptail_stderr # Open an IO stream into a temporary file
+      
+      # Show the package selection menu, redirecting its stderr to our temporary file
+      whiptail --notags\
+          --backtitle "$TITLE" --title "$TITLE"\
+          --ok-button "Back" --nocancel\
+          --checklist "Please select desired packages:" $SIZE\
+          "${menu_options[@]}" 2>&3
+      
+      exec 3>&- # Close the IO stream
+            
+      # Read the temporary file into a variable and tidy up
+      choices=$(tr -d '"' < /tmp/whiptail_stderr)
+      rm /tmp/whiptail_stderr
+      
+      # Apply choices into the selections array
+      selections[$category]=
+      for ID in $choices; do
+		# Parse the IDs returned by Whiptail back into package names
+		name=${menu_options[$(( $ID*3+1 ))]}
+		selections[$category]+="$name"
+      done
     fi
-    
+      
   done
   
   # TODO: Install all selected packages
