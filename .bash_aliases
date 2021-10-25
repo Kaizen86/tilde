@@ -146,7 +146,7 @@ when() { # Calculates the age of files/directories and displays it in a human-re
       echo "Usage: ${FUNCNAME[0]} [OPTION] FILES
 Displays a human-readable time since the created/accessed/modified field of files and folders.
 
-Measurement arguments:
+Options:
   -c, --created           Time since file creation
   -a, --accessed          Time since last file access
   -m, --modified          Time since last modification (default mode)
@@ -235,25 +235,84 @@ __show_pkgmanager_error() { # Hidden function that shows a message explaining ho
   echo -e "Error: no compatible package manager was detected. This is caused by a lack of support for your distro's package manager.\n\nTo fix this, navigate to the section in .bashrc responsible for setting \$PKG_MANAGER and uncomment the appropriate line.\nThen, extend the functionality of the package management functions contained in .bash_aliases.\nOnce these steps are done, reload the changes either through the source command or by restarting the terminal.\n\nPlease submit consider submitting extensions you make to the repo, that would be greatly appreciated!"
 }
 
-fetch() { # Installs packages
+__pkgmanagement_noconfirm_flag() { # Returns the flag used by the system package manager for skipping confirmation prompts
   case $PKG_MANAGER in
     apt-get)
-      sudo apt-get install "${@:1}"
+      echo "-y"
       ;;
     pacman)
-      sudo pacman -S "${@:1}"
+      echo "--noconfirm"
+      ;;
+  esac
+}
+
+fetch() { # Installs packages
+  # Parse the first argument, if any.
+  case "$1" in
+    --help)
+      echo "Usage: ${FUNCNAME[0]} [OPTION] PACKAGES
+Installs one or more packages, optionally autonomously.
+Part of a collection of functions to abstract the underlying system package manager into universal commands
+
+Options: (Use at your own risk, these are intended for scripting)
+  -y, --yestoall           Bypass confirmation prompts by supplying a flag to suppress them."
+      return 0
+      ;;
+
+    -y|--yestoall)
+      local noconfirm=$(__pkgmanagement_noconfirm_flag)
+      shift
+      ;;
+    -*)
+      echo "${FUNCNAME[0]}: unrecognised option '$1'
+Try '${FUNCNAME[0]} --help' for more information"
+      return 1
+      ;;
+  esac
+  
+  # Run appropriate command
+  case $PKG_MANAGER in
+    apt-get)
+      sudo apt-get install $noconfirm "${@:1}"
+      ;;
+    pacman)
+      sudo pacman -S $noconfirm "${@:1}"
       ;;
     *)
       __show_pkgmanager_error
   esac
 }
 purge() { # Removes packages, as well as any orphaned dependencies
+# Parse the first argument, if any.
+  case "$1" in
+    --help)
+      echo "Usage: ${FUNCNAME[0]} [OPTION] PACKAGES
+Removes one or more packages and any unused dependencies, optionally autonomously.
+Part of a collection of functions to abstract the underlying system package manager into universal commands
+
+Options: (Use at your own risk, these are intended for scripting)
+  -y, --yestoall           Bypass confirmation prompts by supplying a flag to suppress them."
+      return 0
+      ;;
+
+    -y|--yestoall)
+      local noconfirm=$(__pkgmanagement_noconfirm_flag)
+      shift
+      ;;
+    -*)
+      echo "${FUNCNAME[0]}: unrecognised option '$1'
+Try '${FUNCNAME[0]} --help' for more information"
+      return 1
+      ;;
+  esac
+  
+  # Run appropriate command
   case $PKG_MANAGER in
     apt-get)
-      sudo apt-get purge "${@:1}"
+      sudo apt-get purge $noconfirm "${@:1}"
       ;;
     pacman)
-      sudo pacman -Rs "${@:1}";
+      sudo pacman -Rs $noconfirm "${@:1}";
       ;;
     *)
       __show_pkgmanager_error
@@ -286,28 +345,76 @@ update() { # Synchronises local package database
   esac
 }
 upgrade() { # Performs an upgrade of all packages
+# Parse the first argument, if any.
+  case "$1" in
+    --help)
+      echo "Usage: ${FUNCNAME[0]} [OPTION] PACKAGES
+Upgrades all outdated packages, optionally autonomously.
+Part of a collection of functions to abstract the underlying system package manager into universal commands
+
+Options: (Use at your own risk, these are intended for scripting)
+  -y, --yestoall           Bypass confirmation prompts by supplying a flag to suppress them."
+      return 0
+      ;;
+
+    -y|--yestoall)
+      local noconfirm=$(__pkgmanagement_noconfirm_flag)
+      shift
+      ;;
+    -*)
+      echo "${FUNCNAME[0]}: unrecognised option '$1'
+Try '${FUNCNAME[0]} --help' for more information"
+      return 1
+      ;;
+  esac
+  
+  # Run appropriate command
   case $PKG_MANAGER in
     apt-get)
-      sudo apt-get upgrade
+      sudo apt-get $noconfirm upgrade
       ;;
     pacman)
-      sudo pacman -Syu
+      sudo pacman $noconfirm -Syu
       ;;
     *)
       __show_pkgmanager_error
   esac
 }
 autoremove() { # Automatically removes orphaned packages
+# Parse the first argument, if any.
+  case "$1" in
+    --help)
+      echo "Usage: ${FUNCNAME[0]} [OPTION] PACKAGES
+Removes any unused packages, optionally autonomously.
+Part of a collection of functions to abstract the underlying system package manager into universal commands
+
+Options: (Use at your own risk, these are intended for scripting)
+  -y, --yestoall           Bypass confirmation prompts by supplying a flag to suppress them."
+      return 0
+      ;;
+
+    -y|--yestoall)
+      local noconfirm=$(__pkgmanagement_noconfirm_flag)
+      shift
+      ;;
+    -*)
+      echo "${FUNCNAME[0]}: unrecognised option '$1'
+Try '${FUNCNAME[0]} --help' for more information"
+      return 1
+      ;;
+  esac
+  
+  # Run appropriate command
   case $PKG_MANAGER in
     apt-get)
-      sudo apt-get autoremove
+      sudo apt-get $noconfirm autoremove
       ;;
     pacman)
       unused=$(pacman -Qtdq)
       if [ -z "$unused" ]; then
         echo Nothing to do
       else
-        sudo pacman -Rs $unused
+        sudo pacman $noconfirm -Rs $unused
       fi
       ;;
     *)
