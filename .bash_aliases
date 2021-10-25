@@ -448,7 +448,11 @@ initial-setup() {
   # TODO: Show a menu to select categories with nested entries to fine-tune package selection.
   # TODO: For all selected packages from the aforementioned menu, attempt to install each one.
   
-  # TODO: Automatically select all from core and pip
+  # Automatically select all from core and pip
+  auto_select_all=(core pip)
+  for category in "${auto_select_all[@]}"; do
+    selections[$category]=${packages[$category]}
+  done
     
   # Main menu loop
   while true; do
@@ -458,14 +462,13 @@ initial-setup() {
     
     # Construct list of options to present to the user
     local menu_options="" # Clear list
-    for c in "${package_categories[@]}"
-    do
+    for category in "${package_categories[@]}"; do
       # TODO: Option for select/remove all should be put here
       # "$i_all" "  Remove all"
-      [[ "${selections[$c]}" == "" ]] && toggleword=Select || toggleword=Remove # Choose Remove or Select
+      [[ "${selections[$category]}" == "" ]] && toggleword=Select || toggleword=Remove # Choose Remove or Select
       toggle=" ╔$toggleword all" # Weird space characters used to work around shell expansion
-      menu_options+="${c}_all ${toggle} "
-      menu_options+="$c $c "
+      menu_options+="${category}_all ${toggle} "
+      menu_options+="$category $category "
     done
     menu_options=$menu_options"INSTALL -=Install=-"
     
