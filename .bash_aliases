@@ -358,6 +358,7 @@ initial-setup() {
     ne\
     neofetch\
     python3\
+    python-pip\
     rsync\
     tar\
     wget\
@@ -557,6 +558,23 @@ initial-setup() {
       
   done
   
-  # TODO: Install all selected packages
+  # Install all selected packages
   # for p in selections
+  for category in "${package_categories[@]}"; do # Iterate over package categories in a sensible order
+    # Has the user selected any packages from that category?
+    if [[ "${!selections[@]}" == *"$category"* ]]; then
+      # Yes. Iterate over each selected package in that category
+      SAVEIFS=$IFS # Make a backup of the IFS
+      IFS=' ' read -r -a array <<< "${selections[$category]}" # Split string into array
+      for package in "${array[@]}"; do
+        echo "$package"
+        # TODO: fetch command goes here
+        # TODO: differentiate between pip category and everything else
+      done
+    fi
+  done
+  #echo "${!selections[@]}" # Applicable categories
+  #echo "${selections[@]}" # All packages
+  
+
 }
