@@ -673,15 +673,16 @@ initial-setup() {
       # Yes. Iterate over each selected package in that category
       SAVEIFS=$IFS # Make a backup of the IFS
       IFS=' ' read -r -a array <<< "${selections[$category]}" # Split string into array
+      IFS=$SAVEIFS # Restore IFS to previous value
       for package in "${array[@]}"; do
-        echo "$package"
-        # TODO: fetch command goes here
-        # TODO: differentiate between pip category and everything else
+        # Differentiate between pip category and everything else
+        if [ "$category" == "pip" ]; then
+          pip install --no-input --exists-action b $package
+        else
+          # Run standard fetch for anything else
+          fetch -y $package
+        fi
       done
     fi
   done
-  #echo "${!selections[@]}" # Applicable categories
-  #echo "${selections[@]}" # All packages
-  
-
 }
