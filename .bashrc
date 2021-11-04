@@ -28,6 +28,7 @@ declare -A osInfo; # Associative array to match files with a package manager
 # Short list of possible release files and what package manager they indicate
   osInfo[/etc/arch-release]=pacman #Arch
   osInfo[/etc/debian_*]=apt-get #debian
+  osInfo[/etc/lsb-release]=apt-get #Ubuntu
   # The rest of these are examples, I don't use any of these.
   #osInfo[/etc/fedora-release]=dnf #Fedora
   #osInfo[/etc/gentoo-release]=emerge #Gentoo
