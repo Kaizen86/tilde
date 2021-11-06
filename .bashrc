@@ -28,7 +28,6 @@ declare -A osInfo; # Associative array to match files with a package manager
 # Short list of possible release files and what package manager they indicate
   osInfo[/etc/arch-release]=pacman #Arch
   osInfo[/etc/debian_*]=apt-get #debian
-  osInfo[/etc/lsb-release]=apt-get #Ubuntu
   # The rest of these are examples, I don't use any of these.
   #osInfo[/etc/fedora-release]=dnf #Fedora
   #osInfo[/etc/gentoo-release]=emerge #Gentoo
@@ -45,7 +44,7 @@ do
     break # We're done here.
   fi
 done
-unset osInfo # We don't need this anymore
+#unset osInfo # We don't need this anymore
 
 # Determine script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
