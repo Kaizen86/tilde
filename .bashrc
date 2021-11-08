@@ -19,10 +19,10 @@ HISTFILESIZE=5000
 shopt -s histappend # Append to the history file, don't overwrite it
 
 # Determine script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+export TILDE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Extend the PATH to include additional folders
-export PATH=$PATH:"$SCRIPT_DIR"/.local/bin
+export PATH=$PATH:"$TILDE_DIR"/.local/bin
 
 # Ensure GPG is configured correctly
 export GPG_TTY=$(tty)
@@ -49,7 +49,7 @@ done
 unset osInfo # We don't need this anymore
 
 # Run the aliases file if it exists
-[ -f "$SCRIPT_DIR/.bash_aliases" ] && . "$SCRIPT_DIR/.bash_aliases"
+[ -f "$TILDE_DIR/.bash_aliases" ] && . "$TILDE_DIR/.bash_aliases"
 
 # Test for the existence of tput, which is necessary for colours.
 if [ -x /usr/bin/tput ]; then
