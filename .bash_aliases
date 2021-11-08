@@ -26,7 +26,7 @@ alias ls='ls --color=auto'
 alias new='konsole &'
 alias ftp=lftp
 alias music-dl="youtube-dl -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s"
-alias ne='ne --utf8 --ansi --keys ~/.ne/backspacefix.keys' # nice-editor
+alias ne="ne --utf8 --ansi --keys $SCRIPT_DIR/.ne/backspacefix.keys" # nice-editor
 
 # KDE session management aliases
 alias lock='loginctl lock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'

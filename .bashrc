@@ -18,8 +18,11 @@ fi
 HISTFILESIZE=5000
 shopt -s histappend # Append to the history file, don't overwrite it
 
+# Determine script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 # Extend the PATH to include additional folders
-export PATH=$PATH:/home/daniel/.local/bin
+export PATH=$PATH:"$SCRIPT_DIR"/.local/bin
 
 # Ensure GPG is configured correctly
 export GPG_TTY=$(tty)
@@ -36,7 +39,6 @@ declare -A osInfo; # Associative array to match files with a package manager
   #osInfo[/etc/sles-release]=zypper #SuSE
   #osInfo[/etc/SuSE-release]=zypper #SuSE
   #osInfo[/etc/synoinfo.conf]=synopkg #Synology
-
 for f in ${!osInfo[@]} # Iterate over each entry
 do
   if [[ -f $f ]]; then # Test for the file in question
@@ -44,10 +46,7 @@ do
     break # We're done here.
   fi
 done
-#unset osInfo # We don't need this anymore
-
-# Determine script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+unset osInfo # We don't need this anymore
 
 # Run the aliases file if it exists
 [ -f "$SCRIPT_DIR/.bash_aliases" ] && . "$SCRIPT_DIR/.bash_aliases"
