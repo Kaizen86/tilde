@@ -2,7 +2,9 @@
 # ~/.bash_profile
 #
 
-# Determine script directory
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+# Fallback file for login shells
 
-[[ -f "$SCRIPT_DIR/.bashrc" ]] && . "$SCRIPT_DIR/.bashrc"
+# Determine script directory
+export TILDE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+[[ -f "$TILDE_DIR/.bashrc" ]] && . "$TILDE_DIR/.bashrc"
