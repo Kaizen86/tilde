@@ -74,13 +74,13 @@ init-adbfs() { # "Initialise ADBFS"
   fi
 
   # Make the folder if it doesn't exist
-  if [ ! -d $mntdir ]; then
+  if [ ! -d "$mntdir" ]; then
     sudo mkdir "$mntdir" # Root must make it...
     # But the current user must then own it.
     sudo chown $(whoami) "$mntdir"
   fi
   # Double check if it worked
-  if [ -d $mntdir ]; then
+  if [ -d "$mntdir" ]; then
     # It did, proceed.
     adbfs "$mntdir" -o auto_unmount -o fsname=Connor
   else
