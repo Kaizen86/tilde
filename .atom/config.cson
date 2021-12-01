@@ -17,6 +17,7 @@
       autopep8: {}
       flake8:
         ignore: [
+          "E111"
           "E302"
           "E402"
           "W191"
@@ -24,6 +25,7 @@
         maxLineLength: 128
       pycodestyle:
         ignore: [
+          "E111"
           "E302"
           "E402"
           "E305"
@@ -38,7 +40,7 @@
   "line-number-color":
     lineNumberBackground: "#0b6f4e"
   "linter-ui-default":
-    panelHeight: 145
+    panelHeight: 301
   "markdown-preview":
     useGitHubStyle: true
   "spell-check":
