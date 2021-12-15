@@ -25,7 +25,7 @@ alias q=exit
 alias ls='ls --color=auto'
 alias new='konsole &'
 alias ftp=lftp
-alias music-dl="youtube-dl -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s"
+alias music-dl="yt-dlp -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s"
 alias ne="ne --utf8 --ansi --keys $TILDE_DIR/.ne/backspacefix.keys" # nice-editor
 
 # KDE session management aliases
