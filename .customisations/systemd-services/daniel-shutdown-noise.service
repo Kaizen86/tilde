@@ -5,7 +5,7 @@ Before=shutdown.target reboot.target
 [Service]
 Type=oneshot
 ExecStart=/bin/true
-ExecStop=/usr/bin/play /home/daniel/PowerNoises/halt.wav
+ExecStop=/usr/bin/play /home/daniel/.customisations/PowerNoises/halt.wav
 
 RemainAfterExit=yes
 
