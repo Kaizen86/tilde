@@ -450,6 +450,7 @@ initial-setup() {
   
   # List of 'essential' packages, any tool used in this file should be listed here.
   packages[core]=$(echo "\
+    bat\
     coreutils\
     ncurses\
     ack\
@@ -466,7 +467,6 @@ initial-setup() {
   # Python packages that are useful to have. These are in their own category because pip is used to install them
   packages[pip]=$(echo "\
     pip_search\
-    tw2.pygmentize\
   " | xargs)
 
   # List of 'nice-to-have' packages
