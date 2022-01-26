@@ -98,10 +98,10 @@ if [ "$COLOURS_SUPPORTED" = yes ]; then
       DEVICE_COLOUR=$(echo -en '\033[01;32m')
   esac
 
-  PS1='${debian_chroot:+($debian_chroot)}\[$USER_COLOUR\]\u\[\033[01;32m\]@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+  PS1='${debian_chroot:+($debian_chroot)}\[$USER_COLOUR\]\u\[\033[01;32m\]@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 else
   # Plain version for the rare event that colours aren't supported
-  PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+  PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '
 fi
 
 # Set the default editor
