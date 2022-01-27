@@ -67,8 +67,8 @@ if [ "$COLOURS_SUPPORTED" = yes ]; then
   # Select colour for the username section of the prompt
   case $(whoami) in
     daniel)
-      # CYAN
-      USER_COLOUR=$(echo -en '\033[01;36m')
+      # LIGHT BLUE
+      USER_COLOUR=$(echo -en '\033[01;34m')
       ;;
     root)
       # RED
@@ -76,7 +76,7 @@ if [ "$COLOURS_SUPPORTED" = yes ]; then
       ;;
     *) # Unrecognised user
       # LIME
-      USER_COLOUR=$(echo -en '\033[01;32m')
+      USER_COLOUR=$(echo -en '\033[01;33m')
   esac
 
   # Select colour for the hostname section of the prompt
