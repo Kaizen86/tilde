@@ -108,19 +108,11 @@ volume() { # System volume adjustment/readback tool
   if [[ $1 == *-h* ]]; then  # Determine if "-h" appears in the argument. This matches -h and --help
     # Help text
     echo "Usage: ${FUNCNAME[0]} [value]"
-    echo "Returns the current audio volume percentage, "
-    echo "or if a percentage is provided, sets it to that value."
+    echo "Returns the current amixer configuration, "
+    echo "or if a percentage is provided, sets the volume to that value."
   elif [ $# -eq 0 ]; then
-    # Output the current volume percentage if no argument was given
-
-    # TODO: amixer is a tricksy gremlin.
-    # Find a way to reliably determine current volume %, with or without amixer.
-    echo "Volume readback not implemented"
-
-    # Previous non-functional method, kept here as a starting point:
-    #awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master)
-
-    return
+    # Output the current volume settings
+    amixer sget Master
   elif ! [[ $1 =~ ^[-]?[0-9]+$ ]]; then  # Check argument is actually text rather than a number
     echo "${FUNCNAME[0]}: Input was not a number."
   elif [[ $1 -ge 0 && $1 -le 100 ]]; then  # If it's a number between 0 and 100, pass it to amixer
