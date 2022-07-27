@@ -1,5 +1,5 @@
 [Background]
-Color=35,38,39
+Color=23,27,52
 
 [BackgroundFaint]
 Color=49,54,59
@@ -89,8 +89,11 @@ Color=239,240,241
 Color=255,255,255
 
 [General]
+Anchor=0.5,0.5
 Blur=true
 ColorRandomization=false
 Description=Breeze
+FillStyle=Tile
 Opacity=0.73
-Wallpaper=/home/daniel/Pictures/Wallpapers/Terminal.jpg
+Wallpaper=
+WallpaperOpacity=1
