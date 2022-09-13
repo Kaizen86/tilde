@@ -22,7 +22,7 @@ alias pip=pip3
 
 # Miscellaneous aliases
 alias q=exit
-alias cd..="echo \"cd ..\" FTFY ';)';cd .."  # This is a somewhat common typo for me
+alias cd..="echo \\\"cd ..\\\" FTFY ';)';cd .."  # This is a somewhat common typo for me
 alias ls='ls --color=auto'
 alias new='konsole &'
 alias ftp=lftp
