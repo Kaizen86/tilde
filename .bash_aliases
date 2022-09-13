@@ -108,19 +108,28 @@ volume() { # System volume adjustment/readback tool
   # NOTE: This uses amixer, so be sure to install alsa-utils.
   if [[ $1 == *-h* ]]; then  # Determine if "-h" appears in the argument. This matches -h and --help
     # Help text
-    echo "Usage: ${FUNCNAME[0]} [value]"
-    echo "Returns the current amixer configuration, "
+    echo "Usage: ${FUNCNAME[0]} [value/keyword]"
+    echo "Returns the current amixer configuration for the Master mixer,"
     echo "or if a percentage is provided, sets the volume to that value."
+    echo "The mixer may also be muted with the keywords \"mute\" and \"unmute\"."
   elif [ $# -eq 0 ]; then
     # Output the current volume settings
     amixer sget Master
   elif ! [[ $1 =~ ^[-]?[0-9]+$ ]]; then  # Check argument is actually text rather than a number
-    echo "${FUNCNAME[0]}: Input was not a number."
+    # If it was, then check if it is equal to "mute" or "unmute".
+    if [[ $1 =~ ^(un)?mute$ ]]; then
+      amixer set Master $1
+    else
+      # They've given us nonsense - exit with an error
+      echo "${FUNCNAME[0]}: Input was not a number or recognised keyword."
+      return 1
+    fi
   elif [[ $1 -ge 0 && $1 -le 100 ]]; then  # If it's a number between 0 and 100, pass it to amixer
     amixer sset Master $1\%;
   else  # However, if it is not within that range, exit with an error.
     echo "${FUNCNAME[0]}: Input outside of range 0-100."
   fi
+  return 0
 }
 
 when() { # Calculates the age of files/directories and displays it in a human-readable format
