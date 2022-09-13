@@ -5,8 +5,8 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# Run neofetch if the shell is over SSH
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+# Run neofetch if the shell is over SSH and if it's installed
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] && [ -x "$(command -v neofetch)" ]; then
   neofetch
 fi
 
@@ -51,13 +51,13 @@ unset osInfo # We don't need this anymore
 # Run the aliases file if it exists
 [ -f "$TILDE_DIR/.bash_aliases" ] && . "$TILDE_DIR/.bash_aliases"
 
-# Test for the existence of tput, which is necessary for colours.
-if [ -x /usr/bin/tput ]; then
+# Test for the existence of tput, which is necessary for shell colours.
+if [ -x "$(command -v tput)" ]; then
   # It exists, let's run it!
   tput setaf 1 >&/dev/null
   COLOURS_SUPPORTED=yes # Remember that we enabled tput
 else
-  echo "Warning - tput not detected. Fancy prompt will be disabled."
+  echo "Warning - tput not detected. Prompt colours will be disabled."
   COLOURS_SUPPORTED=no
 fi
 
@@ -101,6 +101,7 @@ if [ "$COLOURS_SUPPORTED" = yes ]; then
   PS1='${debian_chroot:+($debian_chroot)}\[$USER_COLOUR\]\u\[\033[01;32m\]@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
 else
   # Plain version for the rare event that colours aren't supported
+  # This is also more human-readable, which makes modifications easier for the extended version.
   PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W\$ '
 fi
 
