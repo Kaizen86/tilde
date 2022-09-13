@@ -98,6 +98,10 @@ git() { # Git shortcuts
   elif [ "$1" == "tree" ]; then
     # Fancier git logs
     $git_exec log --graph --decorate --abbrev-commit --pretty=medium --branches --remotes "${@:2}"
+  elif [[ "$1" =~ ^stst* ]]; then
+    # This is a common typo for me when trying to type "status"
+    echo -e "\"git status\" FTFY ';)'\n"
+    $git_exec status
   else
     # Run Git as normal
     $git_exec "${@:1}"
