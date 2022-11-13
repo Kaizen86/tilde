@@ -1,4 +1,4 @@
-# tilde ~#
+# tilde ~$
 This repository is mostly for my convenience, as I find it nice to have a similar environment on all my Linux boxes. This would normally mean copying a bunch of files from one machine to another, and tracking the various tweaks across machines was becoming a bit hard to manage. So I thought; why not upload them onto a Github repo? Any changes I make can be pushed and then pulled onto all of my devices. Git is designed to manage this exact problem, so I'm not sure why I didn't think of doing this sooner.
 
 You may find some useful functions or ideas here and there, but a lot of it is just my strange personal preferences so it probably isn't very useful to anyone other than myself. Honestly, the only reason I made this public was to avoid having to configure SSH logins on every single machine I wanted to clone the repo onto.
