@@ -13,6 +13,8 @@ fi
 # Force colour mode for less, ls, and grep
 alias less='less -r'
 alias ls='ls --color'
+alias l='ls --color'
+alias la='ls --color -la'
 alias grep='grep --colour=always'
 
 # Python aliases
@@ -22,17 +24,16 @@ alias pip=pip3
 
 # Miscellaneous aliases
 alias q=exit
-alias cd..="echo \\\"cd ..\\\" FTFY ';)';cd .."  # This is a somewhat common typo for me
-alias ls='ls --color=auto'
+alias cd..="echo -e '\"git status\" FTFY ;)'; cd .." # Missing the space is a somewhat common typo for me
 alias new='konsole &'
 alias ftp=lftp
-alias music-dl="yt-dlp -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s"
+alias music-dl='yt-dlp -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s'
 alias open=xdg-open
 
 # Hide ffmpeg (and similar) banners
-alias ffmpeg="ffmpeg -hide_banner"
-alias ffprobe="ffprobe -hide_banner"
-alias ffplay="ffplay -hide_banner"
+alias ffmpeg='ffmpeg -hide_banner'
+alias ffprobe='ffprobe -hide_banner'
+alias ffplay='ffplay -hide_banner'
 
 # KDE session management aliases
 alias lock='loginctl lock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
@@ -72,11 +73,12 @@ pip3() { # Rest in peace 'pip3 search'.
 
 
 init-adbfs() { # "Initialise ADBFS"
+  fsname=Connor
   # Use either a manually specified mountpoint or the default in /run
   if [ "$1" != "" ]; then
     mntdir="$1"
   else
-    mntdir="/run/media/$(whoami)/Connor"
+    mntdir="/run/media/$(whoami)/$fsname"
   fi
 
   # Make the folder if it doesn't exist
@@ -88,7 +90,7 @@ init-adbfs() { # "Initialise ADBFS"
   # Double check if it worked
   if [ -d "$mntdir" ]; then
     # It did, proceed.
-    adbfs "$mntdir" -o auto_unmount -o fsname=Connor
+    adbfs "$mntdir" -o auto_unmount -o fsname="$fsname"
   else
     # Error message
     echo "Aborting, mountpoint couldn't be created."
@@ -105,7 +107,7 @@ git() { # Git shortcuts
     $git_exec log --graph --decorate --abbrev-commit --pretty=medium --branches --remotes "${@:2}"
   elif [[ "$1" =~ ^stst* ]]; then
     # This is a common typo for me when trying to type "status"
-    echo -e "\"git status\" FTFY ';)'\n"
+    echo -e "\"git status\" FTFY ;)\n"
     $git_exec status
   else
     # Run Git as normal
@@ -221,13 +223,20 @@ Try '${FUNCNAME[0]} --help' for more information"
     local H=$((age/60/60%24))
     local M=$((age/60%60))
     local S=$((age%60))
+    # Determine if the units are plural
+    [[ $Y == 1 ]] && Yp="" || Yp="s"
+    [[ $D == 1 ]] && Dp="" || Dp="s"
+    [[ $H == 1 ]] && Hp="" || Hp="s"
+    [[ $M == 1 ]] && Mp="" || Mp="s"
+    [[ $S == 1 ]] && Sp="" || Sp="s"
+    # Output results
     printf '%s: ' "$file"
-    (( $Y > 0 )) && printf '%d years ' $Y
-    (( $D > 0 )) && printf '%d days ' $D
-    (( $H > 0 )) && printf '%d hours ' $H
-    (( $M > 0 )) && printf '%d minutes ' $M
-    (( $Y > 0 || $D > 0 || $H > 0 || $M > 0 )) && printf 'and '
-    printf '%d seconds\n' $S
+    (( $Y > 0 )) && printf '%d year%s, ' $Y $Yp
+    (( $D > 0 )) && printf '%d day%s, ' $D $Dp
+    (( $H > 0 )) && printf '%d hour%s, ' $H $Hp
+    (( $M > 0 )) && printf '%d minute%s, ' $M $Mp
+    (( $Y > 0 || $D > 0 || $H > 0 || $M > 0 )) && printf '\b\b and '
+    printf '%d second%s\n' $S $Sp
   done
 }
 
