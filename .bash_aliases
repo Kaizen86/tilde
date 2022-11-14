@@ -29,6 +29,11 @@ alias ftp=lftp
 alias music-dl="yt-dlp -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s"
 alias open=xdg-open
 
+# Hide ffmpeg (and similar) banners
+alias ffmpeg="ffmpeg -hide_banner"
+alias ffprobe="ffprobe -hide_banner"
+alias ffplay="ffplay -hide_banner"
+
 # KDE session management aliases
 alias lock='loginctl lock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
 alias unlock='loginctl unlock-session $(loginctl show-seat seat0 | grep ActiveSession | cut -d'=' -f 2)'
