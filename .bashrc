@@ -19,7 +19,7 @@ HISTFILESIZE=5000
 shopt -s histappend # Append to the history file, don't overwrite it
 
 # Determine script directory
-export TILDE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+TILDE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Extend the PATH to include additional folders
 export PATH=$PATH:"$TILDE_DIR"/.local/bin
@@ -55,47 +55,46 @@ unset osInfo # We don't need this anymore
 if [ -x "$(command -v tput)" ]; then
   # It exists, let's run it!
   tput setaf 1 >&/dev/null
-  COLOURS_SUPPORTED=yes # Remember that we enabled tput
+  tput_present=true # Remember that we enabled tput
 else
   echo "Warning - tput not detected. Prompt colours will be disabled."
-  COLOURS_SUPPORTED=no
 fi
 
 # Define prompt as USER@HOST:PATH$
 # Use a colour prompt if possible, otherwise use the plain version
-if [ "$COLOURS_SUPPORTED" = yes ]; then
+if [ "$tput_present" ]; then
   # Select colour for the username section of the prompt
   case $(whoami) in
     daniel)
       # LIGHT BLUE
-      USER_COLOUR=$(echo -en '\033[01;34m')
+      USER_COLOUR=$(echo -en '\033[1;34m')
       ;;
     root)
       # RED
-      USER_COLOUR=$(echo -en '\033[01;31m')
+      USER_COLOUR=$(echo -en '\033[1;31m')
       ;;
     *) # Unrecognised user
       # LIME
-      USER_COLOUR=$(echo -en '\033[01;33m')
+      USER_COLOUR=$(echo -en '\033[1;33m')
   esac
 
   # Select colour for the hostname section of the prompt
   case $HOSTNAME in
     daniel-tower)
       # CYAN
-      DEVICE_COLOUR=$(echo -en '\033[01;36m')
+      DEVICE_COLOUR=$(echo -en '\033[1;36m')
       ;;
     daniel-laptop)
       # YELLOW
-      DEVICE_COLOUR=$(echo -en '\033[01;33m')
+      DEVICE_COLOUR=$(echo -en '\033[1;33m')
       ;;
     raspberrypi)
-      # DARK PINK
-      DEVICE_COLOUR=$(echo -en '\033[01;31m')
+      # PINK
+      DEVICE_COLOUR=$(echo -en '\033[1;35m')
       ;;
     *) # Unrecognised device
       # LIME
-      DEVICE_COLOUR=$(echo -en '\033[01;32m')
+      DEVICE_COLOUR=$(echo -en '\033[1;32m')
   esac
 
   PS1='${debian_chroot:+($debian_chroot)}\[$USER_COLOUR\]\u\[\033[01;32m\]@\[$DEVICE_COLOUR\]\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
