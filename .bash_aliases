@@ -24,7 +24,7 @@ alias pip=pip3
 
 # Miscellaneous aliases
 alias q=exit
-alias cd..="echo -e '\"git status\" FTFY ;)'; cd .." # Missing the space is a somewhat common typo for me
+alias cd..="echo -e '\"cd ..\" FTFY ;)'; cd .." # Missing the space is a somewhat common typo for me
 alias new='konsole &'
 alias ftp=lftp
 alias music-dl='yt-dlp -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s'
