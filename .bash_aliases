@@ -104,7 +104,7 @@ git() { # Git shortcuts
   local git_exec=$(which git) # Determine path to git
   if [ "$1" == "clone" ]; then
     # Clone the repository then cd into it
-    $git_exec clone "${@:2}" && cd "$(basename "$2" .git)"
+    $git_exec $@ && cd `basename "${!#}" .git`
   elif [ "$1" == "tree" ]; then
     # Fancier git logs
     $git_exec log --graph --decorate --abbrev-commit --pretty=medium --branches --remotes "${@:2}"
