@@ -10,14 +10,17 @@ fi
 
 # Iterate over all .service files in the current directory
 for file in $SCRIPT_DIR/*.service; do
+	# Determine destination path
+	dest=/etc/systemd/system/"$(basename "$file")"
+
 	# Skip files that are already present
-	if [ -f /etc/systemd/system/"$(basename $file)" ]; then
+	if [ -f "$dest" ]; then
 		echo "Skipping $file"
 		continue
 	fi
 
 	# Make a symbolic link into the correct folder
-	ln -vsT $file /etc/systemd/system/"$(basename $file)"
+	ln -vsT "$file" "$dest"
 done
 
 # Reload list of services
