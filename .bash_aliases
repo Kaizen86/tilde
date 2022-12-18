@@ -86,7 +86,7 @@ init-adbfs() { # "Initialise ADBFS"
 
   # Make the folder if it doesn't exist
   if [ ! -d "$mntdir" ]; then
-    sudo mkdir "$mntdir" # Root must make it...
+    sudo mkdir -p "$mntdir" # Root must make it...
     # But the current user must then own it.
     sudo chown $(whoami) "$mntdir"
   fi
