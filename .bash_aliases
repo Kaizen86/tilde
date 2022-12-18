@@ -46,7 +46,7 @@ alias logout='qdbus org.kde.ksmserver /KSMServer logout 0 0 0'
 mkcd() { mkdir -p "$@" && cd "$@"; }
 
 # C64 style 'print' shortcut
-?(){ echo "$@"; }
+? (){ echo "$@"; }
 
 # HighLight function for ack with passthrough
 if [ -x "$(command -v ack)" ]; then
