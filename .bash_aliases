@@ -334,10 +334,10 @@ findme() { # Searches for packages in the local database
   for package in "${@:1}"; do
     case $PKG_MANAGER in
       apt-get)
-        apt-cache search "$package" | hl "$package"
+        apt-cache search "$package" | hl -i "$package"
         ;;
       pacman)
-        pacman -Ss "$package" | hl "$package"
+        pacman -Ss "$package" | hl -i "$package"
         ;;
       *)
         __show_pkgmanager_error
