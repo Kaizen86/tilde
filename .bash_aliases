@@ -241,6 +241,43 @@ Try '${FUNCNAME[0]} --help' for more information"
 }
 
 
+netmonitor() {
+  ping_dest=google.com
+  SFX_DIR=/opt/vscodium-bin/resources/app/out/vs/platform/audioCues/browser/media
+  sfx_ok=$SFX_DIR/taskCompleted.mp3
+  sfx_bad=$SFX_DIR/quickFixes.mp3
+
+  trap 'exit' SIGINT # Ensure stop on ^C
+
+  ping -c 1 $ping_dest &> /dev/null
+  [ $? -eq 0 ] && state=up || state=down
+  echo -e "Network is $state. Monitoring for change...\n"
+
+  await_net() {
+    [ $1 = up ] && check=-eq || check=-ne
+    while [ 1 ]; do
+      ping -c 1 $ping_dest | grep --colour=none "bytes from"
+      exit_code=${PIPESTATUS[0]}
+      [ $exit_code $check 0 ] && break
+      sleep 1
+    done
+  }
+
+  while [ 1 ]; do
+    if [ $state == down ]; then
+      await_net up
+      echo Connection restored! :D
+      state=up
+      mpv $sfx_ok
+    else
+      await_net down
+      echo Connection is down :\(
+      state=down
+      mpv $sfx_bad
+    fi
+  done
+}
+
 # Package management functions
 
 __show_pkgmanager_error() { # Hidden function that shows a message explaining how to correct unsupported PKG_MANAGER issues
