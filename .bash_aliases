@@ -29,6 +29,7 @@ alias new='konsole &'
 alias ftp=lftp
 alias music-dl='yt-dlp -ciwx --audio-format mp3 --embed-thumbnail --add-metadata -o \%\(title\)s.\%\(ext\)s'
 alias open=xdg-open
+alias xxd='xxd -a'
 
 # Hide ffmpeg (and similar) banners
 alias ffmpeg='ffmpeg -hide_banner'
